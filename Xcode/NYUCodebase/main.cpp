@@ -5,6 +5,8 @@
 #include <SDL_opengl.h>
 #include <SDL_image.h>
 
+#include "ShaderProgram.h"
+
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
 #else
@@ -25,17 +27,33 @@ int main(int argc, char *argv[])
     
     SDL_Event event;
     bool done = false;
+    
+    glViewport(0, 0, 640, 360);
+    
+    ShaderProgram program(RESOURCE_FOLDER"vertex.glsl", RESOURCE_FOLDER"fragment.glsl");
+    
+    Matrix projectionMatrix;
+    Matrix modelMatrix;
+    Matrix viewMatrix;
+    
+    projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
+    
+    glUseProgram(program.programID);
+                          
     while (!done) {
-        
         glClear(GL_COLOR_BUFFER_BIT);
+        
         program.setModelMatrix(modelMatrix);
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
+        
         float vertices[] = {0.5f, -0.5f, 0.0f, 0.5f, -0.5f, -0.5f};
+        
         glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
         glEnableVertexAttribArray(program.positionAttribute);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glDisableVertexAttribArray(program.positionAttribute);
+        
         SDL_GL_SwapWindow(displayWindow);
         
         while (SDL_PollEvent(&event)) {
