@@ -44,10 +44,14 @@ int main(int argc, char *argv[])
         glClear(GL_COLOR_BUFFER_BIT);
         
         program.setModelMatrix(modelMatrix);
+        modelMatrix.identity();
+        modelMatrix.Rotate(45.0 * (3.1415926 / 70));
+        modelMatrix.Translate(-0.7, 1.0, 0.0);
+        
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        float vertices[] = {0.5f, -0.5f, 0.0f, 0.5f, -0.5f, -0.5f};
+        float vertices[] = {0.5f, -0.5f, 0.0f, 1.0f, -0.5f, -0.5f};
         
         glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
         glEnableVertexAttribArray(program.positionAttribute);
