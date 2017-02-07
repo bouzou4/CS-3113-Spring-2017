@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
+#include <math.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -47,6 +49,8 @@ int main(int argc, char *argv[])
     SDL_Event event;
     bool done = false;
     
+    float lastFrameTicks = 0.0f;
+    
     glViewport(0, 0, 640, 360);
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
@@ -65,12 +69,20 @@ int main(int argc, char *argv[])
     glUseProgram(program.programID);
                           
     while (!done) {
+        float ticks = (float)SDL_GetTicks()/1000.0f;
+        float elapsed = ticks - lastFrameTicks;
+        lastFrameTicks = ticks;
+        
+        std::cout << ticks << std::endl;
+        
+        glClearColor(0.2f, 0.0f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         program.setModelMatrix(modelMatrix);
         modelMatrix.identity();
         modelMatrix.Rotate(45.0 * (3.1415926 / 70));
-        modelMatrix.Translate(-0.7, 1.0, 0.0);
+        modelMatrix.Translate((sin(ticks * 10)), (sin(ticks * 5)), 0.0);
+        modelMatrix.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
         
         program.setModelMatrix(modelMatrix);
         program.setProjectionMatrix(projectionMatrix);
