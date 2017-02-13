@@ -59,12 +59,15 @@ int main(int argc, char *argv[])
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     Matrix projectionMatrix;
-    Matrix modelMatrix;
+    Matrix modelMatrix1;
+    Matrix modelMatrix2;
     Matrix viewMatrix;
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     
     GLuint ufoTexture = LoadTexture(RESOURCE_FOLDER"ufo.png");
+    
+    GLuint grassTexture = LoadTexture(RESOURCE_FOLDER"grass.png");
     
     glUseProgram(program.programID);
                           
@@ -78,15 +81,13 @@ int main(int argc, char *argv[])
         glClearColor(0.2f, 0.0f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        program.setModelMatrix(modelMatrix);
-        modelMatrix.identity();
-        modelMatrix.Rotate(45.0 * (3.1415926 / 70));
-        modelMatrix.Translate((sin(ticks * 10)), (sin(ticks * 5)), 0.0);
-        modelMatrix.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
-        
-        program.setModelMatrix(modelMatrix);
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
+        
+        program.setModelMatrix(modelMatrix1);
+        modelMatrix1.identity();
+        modelMatrix1.Translate((sin(ticks * 10)), (sin(ticks * 5) + 0.5), 0.0);
+        modelMatrix1.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
         
         glBindTexture(GL_TEXTURE_2D, ufoTexture);
         float vertices[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
@@ -94,6 +95,21 @@ int main(int argc, char *argv[])
         glEnableVertexAttribArray(program.positionAttribute);
         
         float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+        glEnableVertexAttribArray(program.texCoordAttribute);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDisableVertexAttribArray(program.positionAttribute);
+        glDisableVertexAttribArray(program.texCoordAttribute);
+        
+        program.setModelMatrix(modelMatrix2);
+        modelMatrix2.identity();
+        
+        glBindTexture(GL_TEXTURE_2D, grassTexture);
+        float vertices2[] = {-3.55, -2.0, 3.55, -2.0, 3.55, -1.5, -3.55, -2.0, 3.55, -1.5, -3.55, -1.5};
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices2);
+        glEnableVertexAttribArray(program.positionAttribute);
+        
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
         
