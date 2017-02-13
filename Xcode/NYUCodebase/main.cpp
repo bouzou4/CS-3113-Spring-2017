@@ -39,7 +39,7 @@ GLuint LoadTexture(const char *filePath) {
 int main(int argc, char *argv[])
 {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 360, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 #ifdef _WINDOWS
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     
     float lastFrameTicks = 0.0f;
     
-    glViewport(0, 0, 640, 360);
+    glViewport(0, 0, 1280, 720);
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
