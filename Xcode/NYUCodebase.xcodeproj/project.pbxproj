@@ -23,6 +23,7 @@
 		6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23C01B96CC2600BCE792 /* vertex.glsl */; };
 		D71B18F71E51F0CA001F4F21 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = D71B18F61E51F0CA001F4F21 /* grass.png */; };
 		D791C0C61E4A474300B1E968 /* ufo.png in Resources */ = {isa = PBXBuildFile; fileRef = D791C0C51E4A474300B1E968 /* ufo.png */; };
+		D7B630331E525C150028ADB5 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B630321E525C150028ADB5 /* sky.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		6DEF23C01B96CC2600BCE792 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		D71B18F61E51F0CA001F4F21 /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
 		D791C0C51E4A474300B1E968 /* ufo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ufo.png; path = ../ufo.png; sourceTree = "<group>"; };
+		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		6D5A86A119AE5C710066C1FD = {
 			isa = PBXGroup;
 			children = (
+				D7B630321E525C150028ADB5 /* sky.png */,
 				6D5A86B319AE5C710066C1FD /* NYUCodebase */,
 				6D5A86D119AE5C710066C1FD /* NYUCodebaseTests */,
 				6D5A86AC19AE5C710066C1FD /* Frameworks */,
@@ -217,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
+				D7B630331E525C150028ADB5 /* sky.png in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
 				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,

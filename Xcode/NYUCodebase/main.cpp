@@ -59,15 +59,17 @@ int main(int argc, char *argv[])
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     Matrix projectionMatrix;
-    Matrix modelMatrix1;
-    Matrix modelMatrix2;
     Matrix viewMatrix;
+    Matrix ufoMatrix;
+    Matrix grassMatrix;
+    Matrix skyMatrix;
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     
+    //load all relevant textures
     GLuint ufoTexture = LoadTexture(RESOURCE_FOLDER"ufo.png");
-    
     GLuint grassTexture = LoadTexture(RESOURCE_FOLDER"grass.png");
+    GLuint skyTexture = LoadTexture(RESOURCE_FOLDER"sky.png");
     
     glUseProgram(program.programID);
                           
@@ -84,17 +86,19 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        program.setModelMatrix(modelMatrix1);
-        modelMatrix1.identity();
-        modelMatrix1.Translate((sin(ticks * 10)), (sin(ticks * 5) + 0.5), 0.0);
-        modelMatrix1.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
+        float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+        glEnableVertexAttribArray(program.texCoordAttribute);
         
-        glBindTexture(GL_TEXTURE_2D, ufoTexture);
-        float vertices[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
+        //instantialize the grass floor
+        program.setModelMatrix(grassMatrix);
+        grassMatrix.identity();
+        
+        glBindTexture(GL_TEXTURE_2D, grassTexture);
+        float vertices[] = {-3.55, -2.0, 3.55, -2.0, 3.55, -1.5, -3.55, -2.0, 3.55, -1.5, -3.55, -1.5};
         glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
         glEnableVertexAttribArray(program.positionAttribute);
         
-        float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
         
@@ -102,11 +106,12 @@ int main(int argc, char *argv[])
         glDisableVertexAttribArray(program.positionAttribute);
         glDisableVertexAttribArray(program.texCoordAttribute);
         
-        program.setModelMatrix(modelMatrix2);
-        modelMatrix2.identity();
+        //instantialize the skybox
+        program.setModelMatrix(skyMatrix);
+        skyMatrix.identity();
         
-        glBindTexture(GL_TEXTURE_2D, grassTexture);
-        float vertices2[] = {-3.55, -2.0, 3.55, -2.0, 3.55, -1.5, -3.55, -2.0, 3.55, -1.5, -3.55, -1.5};
+        glBindTexture(GL_TEXTURE_2D, skyTexture);
+        float vertices2[] = {-3.55, -1.5, 3.55, -1.5, 3.55, 2.0, -3.55, -1.5, 3.55, 2.0, -3.55, 2.0};
         glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices2);
         glEnableVertexAttribArray(program.positionAttribute);
         
@@ -117,6 +122,25 @@ int main(int argc, char *argv[])
         glDisableVertexAttribArray(program.positionAttribute);
         glDisableVertexAttribArray(program.texCoordAttribute);
         
+        //instantialize the ufo and its transformations
+        program.setModelMatrix(ufoMatrix);
+        ufoMatrix.identity();
+        ufoMatrix.Translate((sin(ticks * 10)), (sin(ticks * 5) + 0.5), 0.0);
+        ufoMatrix.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
+        
+        glBindTexture(GL_TEXTURE_2D, ufoTexture);
+        float vertices3[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
+        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices3);
+        glEnableVertexAttribArray(program.positionAttribute);
+        
+        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+        glEnableVertexAttribArray(program.texCoordAttribute);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDisableVertexAttribArray(program.positionAttribute);
+        glDisableVertexAttribArray(program.texCoordAttribute);
+        
+        //switch to game window
         SDL_GL_SwapWindow(displayWindow);
         
         while (SDL_PollEvent(&event)) {
@@ -125,7 +149,6 @@ int main(int argc, char *argv[])
             }
         }
         glClear(GL_COLOR_BUFFER_BIT);
-        SDL_GL_SwapWindow(displayWindow);
     }
     
     SDL_Quit();
