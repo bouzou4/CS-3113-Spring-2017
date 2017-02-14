@@ -36,8 +36,7 @@ GLuint LoadTexture(const char *filePath) {
     return retTexture;
 }
 
-int main(int argc, char *argv[])
-{
+void initScene() {
     SDL_Init(SDL_INIT_VIDEO);
     displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
@@ -46,17 +45,38 @@ int main(int argc, char *argv[])
     glewInit();
 #endif
     
+    glViewport(0, 0, 1280, 720);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *texture, float *Verts, float *texVerts) {
+    program->setModelMatrix(*modelMatrix);
+    modelMatrix->identity();
+    
+    glBindTexture(GL_TEXTURE_2D, *texture);
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, Verts);
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texVerts);
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+}
+
+int main(int argc, char *argv[])
+{
+    initScene();
+    
     SDL_Event event;
     bool done = false;
     
     float lastFrameTicks = 0.0f;
     
-    glViewport(0, 0, 1280, 720);
-    
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
-    
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     Matrix projectionMatrix;
     Matrix viewMatrix;
@@ -78,8 +98,6 @@ int main(int argc, char *argv[])
         float elapsed = ticks - lastFrameTicks;
         lastFrameTicks = ticks;
         
-        std::cout << ticks << std::endl;
-        
         glClearColor(0.2f, 0.0f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
@@ -90,55 +108,16 @@ int main(int argc, char *argv[])
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
         
-        //instantialize the grass floor
-        program.setModelMatrix(grassMatrix);
-        grassMatrix.identity();
-        
-        glBindTexture(GL_TEXTURE_2D, grassTexture);
         float vertices[] = {-3.55, -2.0, 3.55, -2.0, 3.55, -1.5, -3.55, -2.0, 3.55, -1.5, -3.55, -1.5};
-        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-        glEnableVertexAttribArray(program.positionAttribute);
-        
-        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-        glEnableVertexAttribArray(program.texCoordAttribute);
-        
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDisableVertexAttribArray(program.positionAttribute);
-        glDisableVertexAttribArray(program.texCoordAttribute);
-        
-        //instantialize the skybox
-        program.setModelMatrix(skyMatrix);
-        skyMatrix.identity();
-        
-        glBindTexture(GL_TEXTURE_2D, skyTexture);
         float vertices2[] = {-3.55, -1.5, 3.55, -1.5, 3.55, 2.0, -3.55, -1.5, 3.55, 2.0, -3.55, 2.0};
-        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices2);
-        glEnableVertexAttribArray(program.positionAttribute);
-        
-        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-        glEnableVertexAttribArray(program.texCoordAttribute);
-        
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDisableVertexAttribArray(program.positionAttribute);
-        glDisableVertexAttribArray(program.texCoordAttribute);
-        
-        //instantialize the ufo and its transformations
-        program.setModelMatrix(ufoMatrix);
-        ufoMatrix.identity();
-        ufoMatrix.Translate((sin(ticks * 10)), (sin(ticks * 5) + 0.5), 0.0);
-        ufoMatrix.Scale((sin(ticks/2)), (sin(ticks/2)), 0.0);
-        
-        glBindTexture(GL_TEXTURE_2D, ufoTexture);
         float vertices3[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
-        glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices3);
-        glEnableVertexAttribArray(program.positionAttribute);
         
-        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-        glEnableVertexAttribArray(program.texCoordAttribute);
+        drawTexturedObj(&program, &grassMatrix, &grassTexture, vertices, texCoords);
+        drawTexturedObj(&program, &skyMatrix, &skyTexture, vertices2, texCoords);
+        drawTexturedObj(&program, &ufoMatrix, &ufoTexture, vertices3, texCoords);
         
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDisableVertexAttribArray(program.positionAttribute);
-        glDisableVertexAttribArray(program.texCoordAttribute);
+        ufoMatrix.Translate((sin(ticks * 5)), (sin(ticks * 2) + 0.5), 0.0);
+        ufoMatrix.Scale((sin(ticks)/2 + .75), (sin(ticks)/2 + .75), 0.0);
         
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);
