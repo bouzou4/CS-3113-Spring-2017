@@ -10,6 +10,7 @@
 #include "stb_image.h"
 
 #include "ShaderProgram.h"
+#include "phyVector.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -115,9 +116,6 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, &grassMatrix, &grassTexture, vertices, texCoords);
         drawTexturedObj(&program, &skyMatrix, &skyTexture, vertices2, texCoords);
         drawTexturedObj(&program, &ufoMatrix, &ufoTexture, vertices3, texCoords);
-        
-        ufoMatrix.Translate((sin(ticks * 5)), (sin(ticks * 2) + 0.5), 0.0);
-        ufoMatrix.Scale((sin(ticks)/2 + .75), (sin(ticks)/2 + .75), 0.0);
         
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);

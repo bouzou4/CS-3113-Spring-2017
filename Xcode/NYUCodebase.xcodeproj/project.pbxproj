@@ -22,6 +22,7 @@
 		6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */; };
 		6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23C01B96CC2600BCE792 /* vertex.glsl */; };
 		D71B18F71E51F0CA001F4F21 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = D71B18F61E51F0CA001F4F21 /* grass.png */; };
+		D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F2171E54A5F100A22748 /* phyVector.cpp */; };
 		D791C0C61E4A474300B1E968 /* ufo.png in Resources */ = {isa = PBXBuildFile; fileRef = D791C0C51E4A474300B1E968 /* ufo.png */; };
 		D7B630331E525C150028ADB5 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B630321E525C150028ADB5 /* sky.png */; };
 /* End PBXBuildFile section */
@@ -37,7 +38,6 @@
 		6D5A86B919AE5C710066C1FD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6D5A86BD19AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6D5A86C519AE5C710066C1FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6D5A86D319AE5C710066C1FD /* NYUCodebaseTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NYUCodebaseTests-Info.plist"; sourceTree = "<group>"; };
 		6D5A86D519AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6D5A86E219AE5CD10066C1FD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -51,6 +51,8 @@
 		6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
 		6DEF23C01B96CC2600BCE792 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		D71B18F61E51F0CA001F4F21 /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
+		D750F2171E54A5F100A22748 /* phyVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = phyVector.cpp; sourceTree = "<group>"; };
+		D750F2181E54A5F100A22748 /* phyVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = phyVector.h; sourceTree = "<group>"; };
 		D791C0C51E4A474300B1E968 /* ufo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ufo.png; path = ../ufo.png; sourceTree = "<group>"; };
 		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -142,7 +144,6 @@
 		6D5A86D219AE5C710066C1FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6D5A86D319AE5C710066C1FD /* NYUCodebaseTests-Info.plist */,
 				6D5A86D419AE5C710066C1FD /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -160,6 +161,8 @@
 				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
 				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
 				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
+				D750F2171E54A5F100A22748 /* phyVector.cpp */,
+				D750F2181E54A5F100A22748 /* phyVector.h */,
 				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
@@ -241,6 +244,7 @@
 			files = (
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
+				D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */,
 				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
