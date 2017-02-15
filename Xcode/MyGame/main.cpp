@@ -16,7 +16,7 @@
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
 #else
-#define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
+#define RESOURCE_FOLDER "MyGame.app/Contents/Resources/"
 #endif
 
 SDL_Window* displayWindow;
