@@ -24,7 +24,6 @@
 		D71B18F71E51F0CA001F4F21 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = D71B18F61E51F0CA001F4F21 /* grass.png */; };
 		D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F2171E54A5F100A22748 /* phyVector.cpp */; };
 		D791C0C61E4A474300B1E968 /* ufo.png in Resources */ = {isa = PBXBuildFile; fileRef = D791C0C51E4A474300B1E968 /* ufo.png */; };
-		D7A9F2491E54FBBC00303C12 /* MyGame-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86B519AE5C710066C1FD /* MyGame-Info.plist */; };
 		D7B630331E525C150028ADB5 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B630321E525C150028ADB5 /* sky.png */; };
 /* End PBXBuildFile section */
 
@@ -228,7 +227,6 @@
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
 				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
-				D7A9F2491E54FBBC00303C12 /* MyGame-Info.plist in Resources */,
 				D791C0C61E4A474300B1E968 /* ufo.png in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
