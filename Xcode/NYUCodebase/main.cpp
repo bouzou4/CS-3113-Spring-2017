@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
+
 #include <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -68,6 +69,12 @@ void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *textur
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
 
+void moveObj(phyVector* vec, Matrix* objMatrix, Coord* objLoc) {
+    objLoc->x += vec->getXVelocity();
+    objLoc->y += vec->getYVelocity();
+    objMatrix->Translate(objLoc->x, objLoc->y, 0.0);
+}
+
 int main(int argc, char *argv[])
 {
     initScene();
@@ -82,8 +89,15 @@ int main(int argc, char *argv[])
     
     Matrix projectionMatrix;
     Matrix viewMatrix;
+    
     Matrix ufoMatrix;
+    phyVector ufoVector;
+    Coord ufoPos;
+    ufoPos.x = 0;
+    ufoPos.y = 0;
+    
     Matrix grassMatrix;
+    
     Matrix skyMatrix;
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
@@ -121,19 +135,24 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, &ufoMatrix, &ufoTexture, vertices3, texCoords);
         
         if(keys[SDL_SCANCODE_LEFT]) {
-            ufoMatrix.Translate(-1.0, 0.0, 0.0);
+            ufoVector.setVelocity(0.03);
+            ufoVector.setAngle(180);
         }
-        else if(keys[SDL_SCANCODE_RIGHT]) {
-            ufoMatrix.Translate(1.0, 0.0, 0.0);
+        if(keys[SDL_SCANCODE_RIGHT]) {
+            ufoVector.setVelocity(0.03);
+            ufoVector.setAngle(0);
         }
-        else if (keys[SDL_SCANCODE_UP]) {
-            ufoMatrix.Translate(0.0, 1.0, 0.0);
+        if (keys[SDL_SCANCODE_UP]) {
+            ufoVector.setVelocity(0.03);
+            ufoVector.setAngle(90);
         }
-        else if (keys[SDL_SCANCODE_DOWN]) {
-            ufoMatrix.Translate(0.0, -1.2, 0.0);
+        if (keys[SDL_SCANCODE_DOWN]) {
+            ufoVector.setVelocity(0.03);
+            ufoVector.setAngle(270);
         }
         
-        phyVector ufoVector;
+        moveObj(&ufoVector, &ufoMatrix, &ufoPos);
+        
         
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);
