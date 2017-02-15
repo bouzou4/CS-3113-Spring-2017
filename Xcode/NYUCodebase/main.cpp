@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 {
     initScene();
     
+    const Uint8* keys;
     SDL_Event event;
     bool done = false;
     
@@ -99,6 +100,8 @@ int main(int argc, char *argv[])
         float elapsed = ticks - lastFrameTicks;
         lastFrameTicks = ticks;
         
+        keys = SDL_GetKeyboardState(NULL);
+        
         glClearColor(0.2f, 0.0f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
@@ -117,12 +120,32 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, &skyMatrix, &skyTexture, vertices2, texCoords);
         drawTexturedObj(&program, &ufoMatrix, &ufoTexture, vertices3, texCoords);
         
+        if(keys[SDL_SCANCODE_LEFT]) {
+            ufoMatrix.Translate(-1.0, 0.0, 0.0);
+        }
+        else if(keys[SDL_SCANCODE_RIGHT]) {
+            ufoMatrix.Translate(1.0, 0.0, 0.0);
+        }
+        else if (keys[SDL_SCANCODE_UP]) {
+            ufoMatrix.Translate(0.0, 1.0, 0.0);
+        }
+        else if (keys[SDL_SCANCODE_DOWN]) {
+            ufoMatrix.Translate(0.0, -1.2, 0.0);
+        }
+        
+        phyVector ufoVector;
+        
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);
         
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
+            }
+            else if(event.type == SDL_KEYDOWN) {
+                if(event.key.keysym.scancode == SDL_SCANCODE_E) {
+                    std::cout << "key e pressed" << std::endl;
+                }
             }
         }
         glClear(GL_COLOR_BUFFER_BIT);
