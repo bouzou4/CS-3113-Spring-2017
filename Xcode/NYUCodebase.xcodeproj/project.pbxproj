@@ -28,12 +28,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6D5A86AA19AE5C710066C1FD /* MyGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYUCodebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5A86AD19AE5C710066C1FD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6D5A86B019AE5C710066C1FD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6D5A86B119AE5C710066C1FD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		6D5A86B219AE5C710066C1FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6D5A86B519AE5C710066C1FD /* MyGame-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyGame-Info.plist"; sourceTree = "<group>"; };
+		6D5A86B519AE5C710066C1FD /* NYUCodebase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NYUCodebase-Info.plist"; sourceTree = "<group>"; };
 		6D5A86B719AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6D5A86B919AE5C710066C1FD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6D5A86BD19AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 		D750F2171E54A5F100A22748 /* phyVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = phyVector.cpp; sourceTree = "<group>"; };
 		D750F2181E54A5F100A22748 /* phyVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = phyVector.h; sourceTree = "<group>"; };
 		D791C0C51E4A474300B1E968 /* ufo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ufo.png; path = ../ufo.png; sourceTree = "<group>"; };
-		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sky.png; path = ../sky.png; sourceTree = "<group>"; };
+		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +75,9 @@
 		6D5A86A119AE5C710066C1FD = {
 			isa = PBXGroup;
 			children = (
-				6D5A86B319AE5C710066C1FD /* GameResources */,
-				6D5A86D119AE5C710066C1FD /* MyGameTests */,
+				D7B630321E525C150028ADB5 /* sky.png */,
+				6D5A86B319AE5C710066C1FD /* NYUCodebase */,
+				6D5A86D119AE5C710066C1FD /* NYUCodebaseTests */,
 				6D5A86AC19AE5C710066C1FD /* Frameworks */,
 				6D5A86AB19AE5C710066C1FD /* Products */,
 			);
@@ -85,7 +86,7 @@
 		6D5A86AB19AE5C710066C1FD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6D5A86AA19AE5C710066C1FD /* MyGame.app */,
+				6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,33 +113,31 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		6D5A86B319AE5C710066C1FD /* GameResources */ = {
+		6D5A86B319AE5C710066C1FD /* NYUCodebase */ = {
 			isa = PBXGroup;
 			children = (
 				6D5A86E119AE5CAA0066C1FD /* Code */,
 				6D5A86B419AE5C710066C1FD /* Supporting Files */,
 			);
-			name = GameResources;
-			path = MyGame;
+			path = NYUCodebase;
 			sourceTree = "<group>";
 		};
 		6D5A86B419AE5C710066C1FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				6D5A86C519AE5C710066C1FD /* Images.xcassets */,
-				6D5A86B519AE5C710066C1FD /* MyGame-Info.plist */,
+				6D5A86B519AE5C710066C1FD /* NYUCodebase-Info.plist */,
 				6D5A86B619AE5C710066C1FD /* InfoPlist.strings */,
 				6D5A86BC19AE5C710066C1FD /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		6D5A86D119AE5C710066C1FD /* MyGameTests */ = {
+		6D5A86D119AE5C710066C1FD /* NYUCodebaseTests */ = {
 			isa = PBXGroup;
 			children = (
 				6D5A86D219AE5C710066C1FD /* Supporting Files */,
 			);
-			name = MyGameTests;
 			path = NYUCodebaseTests;
 			sourceTree = "<group>";
 		};
@@ -153,7 +152,6 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				D7B630321E525C150028ADB5 /* sky.png */,
 				D791C0C51E4A474300B1E968 /* ufo.png */,
 				D71B18F61E51F0CA001F4F21 /* grass.png */,
 				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
@@ -174,9 +172,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6D5A86A919AE5C710066C1FD /* MyGame */ = {
+		6D5A86A919AE5C710066C1FD /* NYUCodebase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6D5A86DB19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "MyGame" */;
+			buildConfigurationList = 6D5A86DB19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "NYUCodebase" */;
 			buildPhases = (
 				6D5A86A619AE5C710066C1FD /* Sources */,
 				6D5A86A719AE5C710066C1FD /* Frameworks */,
@@ -186,9 +184,9 @@
 			);
 			dependencies = (
 			);
-			name = MyGame;
+			name = NYUCodebase;
 			productName = NYUCodebase;
-			productReference = 6D5A86AA19AE5C710066C1FD /* MyGame.app */;
+			productReference = 6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +199,7 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Ivan Safrin";
 			};
-			buildConfigurationList = 6D5A86A519AE5C710066C1FD /* Build configuration list for PBXProject "MyGame" */;
+			buildConfigurationList = 6D5A86A519AE5C710066C1FD /* Build configuration list for PBXProject "NYUCodebase" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -214,7 +212,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6D5A86A919AE5C710066C1FD /* MyGame */,
+				6D5A86A919AE5C710066C1FD /* NYUCodebase */,
 			);
 		};
 /* End PBXProject section */
@@ -381,7 +379,7 @@
 					/Library/Frameworks/SDL2_image.framework/Versions/A/Headers,
 					/Library/Frameworks/SDL2.framework/Versions/A/Headers,
 				);
-				INFOPLIST_FILE = "NYUCodebase/MyGame-Info.plist";
+				INFOPLIST_FILE = "NYUCodebase/NYUCodebase-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.ivansafrin.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -405,7 +403,7 @@
 					/Library/Frameworks/SDL2_image.framework/Versions/A/Headers,
 					/Library/Frameworks/SDL2.framework/Versions/A/Headers,
 				);
-				INFOPLIST_FILE = "NYUCodebase/MyGame-Info.plist";
+				INFOPLIST_FILE = "NYUCodebase/NYUCodebase-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.ivansafrin.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -415,7 +413,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6D5A86A519AE5C710066C1FD /* Build configuration list for PBXProject "MyGame" */ = {
+		6D5A86A519AE5C710066C1FD /* Build configuration list for PBXProject "NYUCodebase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D5A86D919AE5C710066C1FD /* Debug */,
@@ -424,7 +422,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6D5A86DB19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "MyGame" */ = {
+		6D5A86DB19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "NYUCodebase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6D5A86DC19AE5C710066C1FD /* Debug */,
