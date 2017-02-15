@@ -8,6 +8,7 @@
 
 #include "phyVector.h"
 #include <math.h>
+#define PI 3.14159265358979323846 /* pi */
 
 phyVector::phyVector() {
     velocity = 0;
@@ -15,20 +16,20 @@ phyVector::phyVector() {
 }
 phyVector::phyVector(float vel, float ang) {
     velocity = vel;
-    angle = ang;
+    angle = fmodf(ang, 360);
 }
 
 float phyVector::getXVelocity(){
-    return cos(angle)*velocity;
+    return cos(angle * (PI / 180.0)) * velocity;
 }
 float phyVector::getYVelocity() {
-    return sin(angle)*velocity;
+    return sin(angle * (PI / 180.0))*velocity;
 }
 void phyVector::setVelocity(float vel) {
     velocity = vel;
 }
 void phyVector::setAngle(float ang) {
-    angle = ang;
+    angle = fmodf(ang, 360);
 }
 float phyVector::getAngle() {
     return angle;
