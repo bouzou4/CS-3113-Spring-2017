@@ -25,3 +25,8 @@ public:
     float getCompoundVelocity();
     float getAngle();
 };
+
+struct Coord {
+    float x;
+    float y;
+};
