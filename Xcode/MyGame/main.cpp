@@ -138,13 +138,16 @@ int main(int argc, char *argv[])
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
         
-        float vertices[] = {-3.55, -2.0, 3.55, -2.0, 3.55, -1.5, -3.55, -2.0, 3.55, -1.5, -3.55, -1.5};
-        float vertices2[] = {-3.55, -1.5, 3.55, -1.5, 3.55, 2.0, -3.55, -1.5, 3.55, 2.0, -3.55, 2.0};
-        float vertices3[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
+        float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
+        float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
+        float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
+        float boxVerts[] ={-0.2, -0.5, 0.2, -0.5, 0.2, 0.5, -0.2, -0.5, 0.2, 0.5, -0.2, 0.5};
         
-        drawTexturedObj(&program, &grassMatrix, &grassTexture, vertices, texCoords);
-        drawTexturedObj(&program, &skyMatrix, &skyTexture, vertices2, texCoords);
-        drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, vertices3, texCoords);
+        drawTexturedObj(&program, sky.getMatrix(), &skyTexture, skyVerts, texCoords);
+        drawTexturedObj(&program, ground.getMatrix(), &grassTexture, groundVerts, texCoords);
+        drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, ufoVerts, texCoords);
+        drawTexturedObj(&program, box1.getMatrix(), &ufoTexture, boxVerts, texCoords);
+        drawTexturedObj(&program, box2.getMatrix(), &ufoTexture, boxVerts, texCoords);
         
         if(keys[SDL_SCANCODE_LEFT]) {
             ufo.getVector()->setVelocity(0.03);
@@ -163,14 +166,15 @@ int main(int argc, char *argv[])
             ufo.getVector()->setAngle(270);
         }
         
-        if(boxCollision(*ufo.getPos(), 1, 1, ground, 0.5, 7.1) || ((ufo.getPos()->getY() + 0.5) > 2)) {
+        if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
         }
-        if (((ufo.getPos()->getX() + 0.5) > 3.55) || ((ufo.getPos()->getX() - 0.5) < -3.55)) {
+        if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
             ufo.getVector()->flipX();
         }
         
-        
+        sky.drawObj();
+        ground.drawObj();
         ufo.moveObj();
         
         
@@ -192,6 +196,7 @@ int main(int argc, char *argv[])
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
                     std::cout << "key shift pressed" << std::endl;
+                    ufo.getVector()->setVelocity(0);
                 }
             }
         }
