@@ -75,6 +75,10 @@ void moveObj(phyVector* vec, Matrix* objMatrix, Coord* objLoc) {
     objMatrix->Translate(objLoc->x, objLoc->y, 0.0);
 }
 
+bool boxCollision(Coord pos1, float height1, float width1, Coord pos2, float height2, float width2) {
+    return (abs(pos1.x - pos2.x) * 2 < (width1 + width2)) && (abs(pos1.y - pos2.y) * 2 < (height1 + height2));
+}
+
 int main(int argc, char *argv[])
 {
     initScene();
@@ -96,7 +100,15 @@ int main(int argc, char *argv[])
     ufoPos.x = 0;
     ufoPos.y = 0;
     
+    Matrix ceilingMatrix;
+    Coord ceiling;
+    ceiling.x = 0;
+    ceiling.y = 0;
+    
     Matrix grassMatrix;
+    Coord ground;
+    ground.x = 0;
+    ground.y = -1.75;
     
     Matrix skyMatrix;
     
@@ -150,6 +162,17 @@ int main(int argc, char *argv[])
             ufoVector.setVelocity(0.03);
             ufoVector.setAngle(270);
         }
+        
+        if(boxCollision(ufoPos, 1, 1, ground, 0.5, 7.1)) {
+            ufoVector.setAngle(ufoVector.getAngle() + 180);
+        }
+        if (((ufoPos.x + 0.5) > 3.55) || ((ufoPos.x - 0.5) < -3.55)) {
+            ufoVector.setAngle(ufoVector.getAngle() + 180);
+        }
+        if ((ufoPos.y + 0.5) > 2) {
+            ufoVector.setAngle(ufoVector.getAngle() + 180);
+        }
+        
         
         moveObj(&ufoVector, &ufoMatrix, &ufoPos);
         
