@@ -31,7 +31,20 @@ public:
     float getAngle();
 };
 
-struct Coord {
+class Coord {
+private:
     float x;
     float y;
+public:
+    Coord(float x, float y);
+    Coord();
+    
+    float getX();
+    float getY();
+    void setX(float val);
+    void setY(float val);
+    void transformX(float val);
+    void transformY(float val);
+    void transform(float valX, float valY);
+    
 };

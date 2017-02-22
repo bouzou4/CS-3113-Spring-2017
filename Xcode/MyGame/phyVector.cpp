@@ -52,3 +52,22 @@ float phyVector::getAngle() {
 float phyVector::getCompoundVelocity() {
     return velocity;
 }
+
+
+Coord::Coord(float x, float y) : x(x), y(y) {}
+Coord::Coord() : x(0.0), y(0.0) {}
+
+float Coord::getX() {return x;}
+float Coord::getY() {return y;}
+void Coord::setX(float val) {x = val;}
+void Coord::setY(float val) {y = val;}
+void Coord::transformX(float val) {
+    x += val;
+}
+void Coord::transformY(float val) {
+    y += val;
+}
+void Coord::transform(float valX, float valY) {
+    transformX(valX);
+    transformY(valY);
+}
