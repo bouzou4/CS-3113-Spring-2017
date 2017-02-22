@@ -70,7 +70,25 @@ void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *textur
 }
 
 bool boxCollision(Coord& pos1, float height1, float width1, Coord& pos2, float height2, float width2) {
-    return (abs(pos1.getX() - pos2.getX()) * 2 < (width1 + width2)) && (abs(pos1.getY() - pos2.getY()) * 2 < (height1 + height2));
+    float top1 = (pos1.getY() + height1/2);
+    float top2 = (pos2.getY() + height2/2);
+    float right1 = (pos1.getX() + width1/2);
+    float right2 = (pos2.getX() + width2/2);
+    float bottom1 = (pos1.getY() - height1/2);
+    float bottom2 = (pos2.getY() - height2/2);
+    float left1 = (pos1.getX() - width1/2);
+    float left2 = (pos2.getX() - width2/2);
+    
+    bool top = ((top1 > bottom2) && (top1 < top2));
+    bool right = ((right1 > left2) && (right1 < right2));
+    bool bottom = ((bottom1 > bottom2) && (bottom1 < top2));
+    bool left = ((right1 > right2) && (left1 < right2));
+    
+    
+    if ((top || bottom) && (left || right)) {
+        return true;
+    }
+    return false;
 }
 
 int main(int argc, char *argv[])
