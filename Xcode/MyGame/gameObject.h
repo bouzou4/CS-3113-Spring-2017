@@ -16,19 +16,18 @@
 #endif /* gameObject_h */
 
 class gameObject {
+protected:
     Coord position;
-    phyVector vectr;
     Matrix modelMatrix;
     
 public:
-    gameObject(float posX, float posY, float vecVel, float vecAng);
+    gameObject(const float& posX, const float& posY);
     gameObject();
     
     Matrix* getMatrix();
-    phyVector* getVector();
     Coord* getPos();
     
     void setCenter(float* verts, const int& size);
     
-    void moveObj();
+    void drawObj();
 };

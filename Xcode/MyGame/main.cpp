@@ -11,7 +11,7 @@
 #include "stb_image.h"
 
 #include "ShaderProgram.h"
-#include "gameObject.h"
+#include "physObject.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -88,15 +88,11 @@ int main(int argc, char *argv[])
     Matrix projectionMatrix;
     Matrix viewMatrix;
     
-    gameObject ufo;
-    
-    Matrix ceilingMatrix;
-    Coord ceiling;
-    
-    Matrix grassMatrix;
-    Coord ground(0, -1.75);
-    
-    Matrix skyMatrix;
+    physObject ufo;
+    physObject box1;
+    physObject box2;
+    gameObject sky(0, 0.25);
+    gameObject ground(0, -1.75);
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     

@@ -8,19 +8,16 @@
 
 #include "gameObject.h"
 
-gameObject::gameObject(float posX, float posY, float vecVel, float vecAng) : position(posX, posY), vectr(vecVel, vecAng) {}
-gameObject::gameObject() : position(), vectr() {}
+gameObject::gameObject(const float& posX, const float& posY) : position(posX, posY) {}
+gameObject::gameObject() : position() {}
 
 Matrix* gameObject::getMatrix() {return &modelMatrix;}
-phyVector* gameObject::getVector() {return &vectr;}
 Coord* gameObject::getPos() {return &position;}
 
 void setCenter(float* verts, const int& size) {
     
 }
 
-void gameObject::moveObj() {
-    position.setX(position.getX() + vectr.getXVelocity());
-    position.setY(position.getY() + vectr.getYVelocity());
+void gameObject::drawObj() {
     modelMatrix.Translate(position.getX(), position.getY(), 0.0);
 }
