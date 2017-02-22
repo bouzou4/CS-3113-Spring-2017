@@ -40,10 +40,10 @@ float phyVector::getXVelocity(){
 float phyVector::getYVelocity() {
     return sin(angle * (PI / 180.0))*velocity;
 }
-void phyVector::setVelocity(float vel) {
+void phyVector::setVelocity(const float& vel) {
     velocity = vel;
 }
-void phyVector::setAngle(float ang) {
+void phyVector::setAngle(const float& ang) {
     angle = fmodf(ang, 360);
 }
 float phyVector::getAngle() {
@@ -59,15 +59,11 @@ Coord::Coord() : x(0.0), y(0.0) {}
 
 float Coord::getX() {return x;}
 float Coord::getY() {return y;}
-void Coord::setX(float val) {x = val;}
-void Coord::setY(float val) {y = val;}
-void Coord::transformX(float val) {
-    x += val;
-}
-void Coord::transformY(float val) {
-    y += val;
-}
-void Coord::transform(float valX, float valY) {
+void Coord::setX(const float& val) {x = val;}
+void Coord::setY(const float& val) {y = val;}
+void Coord::transformX(const float& val) {x += val;}
+void Coord::transformY(const float& val) {y += val;}
+void Coord::transform(const float& valX, const float& valY) {
     transformX(valX);
     transformY(valY);
 }

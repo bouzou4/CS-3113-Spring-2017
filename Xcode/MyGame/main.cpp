@@ -11,7 +11,7 @@
 #include "stb_image.h"
 
 #include "ShaderProgram.h"
-#include "phyVector.h"
+#include "gameObject.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -69,14 +69,8 @@ void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *textur
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
 
-void moveObj(phyVector* vec, Matrix* objMatrix, Coord* objLoc) {
-    objLoc->x += vec->getXVelocity();
-    objLoc->y += vec->getYVelocity();
-    objMatrix->Translate(objLoc->x, objLoc->y, 0.0);
-}
-
-bool boxCollision(Coord pos1, float height1, float width1, Coord pos2, float height2, float width2) {
-    return (abs(pos1.x - pos2.x) * 2 < (width1 + width2)) && (abs(pos1.y - pos2.y) * 2 < (height1 + height2));
+bool boxCollision(Coord& pos1, float height1, float width1, Coord& pos2, float height2, float width2) {
+    return (abs(pos1.getX() - pos2.getX()) * 2 < (width1 + width2)) && (abs(pos1.getY() - pos2.getY()) * 2 < (height1 + height2));
 }
 
 int main(int argc, char *argv[])
@@ -94,21 +88,13 @@ int main(int argc, char *argv[])
     Matrix projectionMatrix;
     Matrix viewMatrix;
     
-    Matrix ufoMatrix;
-    phyVector ufoVector;
-    Coord ufoPos;
-    ufoPos.x = 0;
-    ufoPos.y = 0;
+    gameObject ufo;
     
     Matrix ceilingMatrix;
     Coord ceiling;
-    ceiling.x = 0;
-    ceiling.y = 0;
     
     Matrix grassMatrix;
-    Coord ground;
-    ground.x = 0;
-    ground.y = -1.75;
+    Coord ground(0, -1.75);
     
     Matrix skyMatrix;
     
@@ -144,34 +130,34 @@ int main(int argc, char *argv[])
         
         drawTexturedObj(&program, &grassMatrix, &grassTexture, vertices, texCoords);
         drawTexturedObj(&program, &skyMatrix, &skyTexture, vertices2, texCoords);
-        drawTexturedObj(&program, &ufoMatrix, &ufoTexture, vertices3, texCoords);
+        drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, vertices3, texCoords);
         
         if(keys[SDL_SCANCODE_LEFT]) {
-            ufoVector.setVelocity(0.03);
-            ufoVector.setAngle(180);
+            ufo.getVector()->setVelocity(0.03);
+            ufo.getVector()->setAngle(180);
         }
         if(keys[SDL_SCANCODE_RIGHT]) {
-            ufoVector.setVelocity(0.03);
-            ufoVector.setAngle(0);
+            ufo.getVector()->setVelocity(0.03);
+            ufo.getVector()->setAngle(0);
         }
         if (keys[SDL_SCANCODE_UP]) {
-            ufoVector.setVelocity(0.03);
-            ufoVector.setAngle(90);
+            ufo.getVector()->setVelocity(0.03);
+            ufo.getVector()->setAngle(90);
         }
         if (keys[SDL_SCANCODE_DOWN]) {
-            ufoVector.setVelocity(0.03);
-            ufoVector.setAngle(270);
+            ufo.getVector()->setVelocity(0.03);
+            ufo.getVector()->setAngle(270);
         }
         
-        if(boxCollision(ufoPos, 1, 1, ground, 0.5, 7.1) || ((ufoPos.y + 0.5) > 2)) {
-            ufoVector.flipY();
+        if(boxCollision(*ufo.getPos(), 1, 1, ground, 0.5, 7.1) || ((ufo.getPos()->getY() + 0.5) > 2)) {
+            ufo.getVector()->flipY();
         }
-        if (((ufoPos.x + 0.5) > 3.55) || ((ufoPos.x - 0.5) < -3.55)) {
-            ufoVector.flipX();
+        if (((ufo.getPos()->getX() + 0.5) > 3.55) || ((ufo.getPos()->getX() - 0.5) < -3.55)) {
+            ufo.getVector()->flipX();
         }
         
         
-        moveObj(&ufoVector, &ufoMatrix, &ufoPos);
+        ufo.moveObj();
         
         
         //switch to game window
@@ -184,11 +170,14 @@ int main(int argc, char *argv[])
             else if(event.type == SDL_KEYDOWN) {
                 if(event.key.keysym.scancode == SDL_SCANCODE_E) {
                     std::cout << "key e pressed" << std::endl;
-                    ufoVector.rotateCW();
+                    ufo.getVector()->rotateCW();
                 }
                 else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
                     std::cout << "key q pressed" << std::endl;
-                    ufoVector.rotateCCW();
+                    ufo.getVector()->rotateCCW();
+                }
+                if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
+                    std::cout << "key shift pressed" << std::endl;
                 }
             }
         }

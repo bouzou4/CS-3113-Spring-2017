@@ -22,11 +22,13 @@ public:
     void flipY();
     void rotateCW();
     void rotateCCW();
+    void incrementVelocity(const float& val);
+    void decrementVelocity(const float& val);
     
     float getXVelocity();
     float getYVelocity();
-    void setVelocity(float vel);
-    void setAngle(float ang);
+    void setVelocity(const float& vel);
+    void setAngle(const float& ang);
     float getCompoundVelocity();
     float getAngle();
 };
@@ -41,10 +43,10 @@ public:
     
     float getX();
     float getY();
-    void setX(float val);
-    void setY(float val);
-    void transformX(float val);
-    void transformY(float val);
-    void transform(float valX, float valY);
+    void setX(const float& val);
+    void setY(const float& val);
+    void transformX(const float& val);
+    void transformY(const float& val);
+    void transform(const float& valX, const float& valY);
     
 };
