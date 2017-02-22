@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
     Matrix viewMatrix;
     
     physObject ufo;
-    physObject box1;
-    physObject box2;
+    physObject box1(-3.3, 0);
+    physObject box2(3.3, 0);
     gameObject sky(0, 0.25);
     gameObject ground(0, -1.75);
     
@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, box1.getMatrix(), &ufoTexture, boxVerts, texCoords);
         drawTexturedObj(&program, box2.getMatrix(), &ufoTexture, boxVerts, texCoords);
         
+        //Keyboard Input
         if(keys[SDL_SCANCODE_LEFT]) {
             ufo.getVector()->setVelocity(0.03);
             ufo.getVector()->setAngle(180);
@@ -166,15 +167,18 @@ int main(int argc, char *argv[])
             ufo.getVector()->setAngle(270);
         }
         
+        //Collision Rules
         if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
         }
-        if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
+        if (boxCollision(*ufo.getPos(), .5, .5, *box1.getPos(), 1, 0.4) || boxCollision(*ufo.getPos(), .5, .5, *box2.getPos(), 1, 0.4)) {
             ufo.getVector()->flipX();
         }
         
         sky.drawObj();
         ground.drawObj();
+        box1.moveObj();
+        box2.moveObj();
         ufo.moveObj();
         
         
@@ -187,15 +191,12 @@ int main(int argc, char *argv[])
             }
             else if(event.type == SDL_KEYDOWN) {
                 if(event.key.keysym.scancode == SDL_SCANCODE_E) {
-                    std::cout << "key e pressed" << std::endl;
                     ufo.getVector()->rotateCW();
                 }
                 else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                    std::cout << "key q pressed" << std::endl;
                     ufo.getVector()->rotateCCW();
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
-                    std::cout << "key shift pressed" << std::endl;
                     ufo.getVector()->setVelocity(0);
                 }
             }
