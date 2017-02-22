@@ -20,6 +20,9 @@ public:
     
     void flipX();
     void flipY();
+    void rotateCW();
+    void rotateCCW();
+    
     float getXVelocity();
     float getYVelocity();
     void setVelocity(float vel);

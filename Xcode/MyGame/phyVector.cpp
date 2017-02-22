@@ -25,6 +25,15 @@ void phyVector::flipX() {
 void phyVector::flipY() {
     setAngle(360 - angle);
 }
+
+void phyVector::rotateCW() {
+    setAngle(angle - 5);
+}
+
+void phyVector::rotateCCW() {
+    setAngle(angle + 5);
+}
+
 float phyVector::getXVelocity(){
     return cos(angle * (PI / 180.0)) * velocity;
 }

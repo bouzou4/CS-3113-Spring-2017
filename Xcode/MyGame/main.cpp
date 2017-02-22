@@ -184,6 +184,11 @@ int main(int argc, char *argv[])
             else if(event.type == SDL_KEYDOWN) {
                 if(event.key.keysym.scancode == SDL_SCANCODE_E) {
                     std::cout << "key e pressed" << std::endl;
+                    ufoVector.rotateCW();
+                }
+                else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
+                    std::cout << "key q pressed" << std::endl;
+                    ufoVector.rotateCCW();
                 }
             }
         }
