@@ -19,6 +19,12 @@ phyVector::phyVector(float vel, float ang) {
     angle = fmodf(ang, 360);
 }
 
+void phyVector::flipX() {
+    setAngle(180 - angle);
+}
+void phyVector::flipY() {
+    setAngle(360 - angle);
+}
 float phyVector::getXVelocity(){
     return cos(angle * (PI / 180.0)) * velocity;
 }

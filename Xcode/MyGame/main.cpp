@@ -163,14 +163,11 @@ int main(int argc, char *argv[])
             ufoVector.setAngle(270);
         }
         
-        if(boxCollision(ufoPos, 1, 1, ground, 0.5, 7.1)) {
-            ufoVector.setAngle(ufoVector.getAngle() + 180);
+        if(boxCollision(ufoPos, 1, 1, ground, 0.5, 7.1) || ((ufoPos.y + 0.5) > 2)) {
+            ufoVector.flipY();
         }
         if (((ufoPos.x + 0.5) > 3.55) || ((ufoPos.x - 0.5) < -3.55)) {
-            ufoVector.setAngle(ufoVector.getAngle() + 180);
-        }
-        if ((ufoPos.y + 0.5) > 2) {
-            ufoVector.setAngle(ufoVector.getAngle() + 180);
+            ufoVector.flipX();
         }
         
         

@@ -18,6 +18,8 @@ public:
     phyVector();
     phyVector(float vel, float ang);
     
+    void flipX();
+    void flipY();
     float getXVelocity();
     float getYVelocity();
     void setVelocity(float vel);
