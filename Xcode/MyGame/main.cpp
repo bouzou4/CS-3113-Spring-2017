@@ -106,10 +106,16 @@ int main(int argc, char *argv[])
     Matrix projectionMatrix;
     Matrix viewMatrix;
     
+    float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    
+    
+    float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
     physObject ufo;
-    physObject box1(-3.3, 0);
-    physObject box2(3.3, 0);
+    float boxVerts[] ={-0.2, -0.5, 0.2, -0.5, 0.2, 0.5, -0.2, -0.5, 0.2, 0.5, -0.2, 0.5};
+    physObject box(-3.3, 0);
+    float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
     gameObject sky(0, 0.25);
+    float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
     gameObject ground(0, -1.75);
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
@@ -134,20 +140,13 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
-        
-        float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
-        float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
-        float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
-        float boxVerts[] ={-0.2, -0.5, 0.2, -0.5, 0.2, 0.5, -0.2, -0.5, 0.2, 0.5, -0.2, 0.5};
         
         drawTexturedObj(&program, sky.getMatrix(), &skyTexture, skyVerts, texCoords);
         drawTexturedObj(&program, ground.getMatrix(), &grassTexture, groundVerts, texCoords);
         drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, ufoVerts, texCoords);
-        drawTexturedObj(&program, box1.getMatrix(), &ufoTexture, boxVerts, texCoords);
-        drawTexturedObj(&program, box2.getMatrix(), &ufoTexture, boxVerts, texCoords);
+        drawTexturedObj(&program, box.getMatrix(), &ufoTexture, boxVerts, texCoords);
         
         //Keyboard Input
         if(keys[SDL_SCANCODE_LEFT]) {
@@ -171,14 +170,13 @@ int main(int argc, char *argv[])
         if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
         }
-        if (boxCollision(*ufo.getPos(), .5, .5, *box1.getPos(), 1, 0.4) || boxCollision(*ufo.getPos(), .5, .5, *box2.getPos(), 1, 0.4)) {
+        if (boxCollision(*ufo.getPos(), .5, .5, *box.getPos(), 1, 0.4) || ((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
             ufo.getVector()->flipX();
         }
         
         sky.drawObj();
         ground.drawObj();
-        box1.moveObj();
-        box2.moveObj();
+        box.moveObj();
         ufo.moveObj();
         
         
