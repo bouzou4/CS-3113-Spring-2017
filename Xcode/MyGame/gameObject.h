@@ -19,13 +19,15 @@ class gameObject {
 protected:
     Coord position;
     Matrix modelMatrix;
+    int texture;
     
 public:
-    gameObject(const float& posX, const float& posY);
-    gameObject();
+    gameObject(const float& posX, const float& posY, int texture);
+    gameObject(int texture);
     
     Matrix* getMatrix();
     Coord* getPos();
+    int getTexture();
     
     void setCenter(float* verts, const int& size);
     

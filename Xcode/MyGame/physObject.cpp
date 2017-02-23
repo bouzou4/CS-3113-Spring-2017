@@ -8,9 +8,9 @@
 
 #include "physObject.h"
 
-physObject::physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng) : gameObject(posX, posY), vectr(vecVel, vecAng) {}
-physObject::physObject(const float& posX, const float& posY) : gameObject(posX, posY), vectr() {}
-physObject::physObject() : gameObject(), vectr() {}
+physObject::physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture) : gameObject(posX, posY, texture), vectr(vecVel, vecAng) {}
+physObject::physObject(const float& posX, const float& posY, int texture) : gameObject(posX, posY, texture), vectr() {}
+physObject::physObject(int texture) : gameObject(texture), vectr() {}
 
 phyVector* physObject::getVector() {return &vectr;}
 

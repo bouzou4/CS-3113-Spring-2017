@@ -54,11 +54,11 @@ void initScene() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *texture, float *Verts, float *texVerts) {
+void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, const int& texture, float *Verts, float *texVerts) {
     program->setModelMatrix(*modelMatrix);
     modelMatrix->identity();
     
-    glBindTexture(GL_TEXTURE_2D, *texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
     glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, Verts);
     glEnableVertexAttribArray(program->positionAttribute);
     
@@ -110,25 +110,17 @@ int main(int argc, char *argv[])
     float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
     
     float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
-    gameObject sky(0, 0.25);
+    gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png")));
     float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
-    gameObject ground(0, -1.75);
+    gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png")));
     float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
-    physObject ufo;
+    physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png")));
     float cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
-    gameObject cursor;
+    gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png")));
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     float pixelRatioX(7.1/1280.0);
     float pixelRatioY(4.0/720.0);
-    
-    //load all relevant textures
-    GLuint ufoTexture = LoadTexture(RESOURCE_FOLDER"ufo.png");
-    GLuint grassTexture = LoadTexture(RESOURCE_FOLDER"grass.png");
-    GLuint skyTexture = LoadTexture(RESOURCE_FOLDER"sky.png");
-    GLuint cursorTexture = LoadTexture(RESOURCE_FOLDER"cursor.png");
-    
-    
     
     glUseProgram(program.programID);
                           
@@ -148,10 +140,10 @@ int main(int argc, char *argv[])
         glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
         glEnableVertexAttribArray(program.texCoordAttribute);
         
-        drawTexturedObj(&program, sky.getMatrix(), &skyTexture, skyVerts, texCoords);
-        drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, ufoVerts, texCoords);
-        drawTexturedObj(&program, ground.getMatrix(), &grassTexture, groundVerts, texCoords);
-        drawTexturedObj(&program, cursor.getMatrix(), &cursorTexture, cursorVerts, texCoords);
+        drawTexturedObj(&program, sky.getMatrix(), sky.getTexture(), skyVerts, texCoords);
+        drawTexturedObj(&program, ufo.getMatrix(), ufo.getTexture(), ufoVerts, texCoords);
+        drawTexturedObj(&program, ground.getMatrix(), ground.getTexture(), groundVerts, texCoords);
+        drawTexturedObj(&program, cursor.getMatrix(), cursor.getTexture(), cursorVerts, texCoords);
         
         //Mouse Input
         

@@ -18,9 +18,9 @@ class physObject : public gameObject{
     phyVector vectr;
     
 public:
-    physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng);
-    physObject(const float& posX, const float& posY);
-    physObject();
+    physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture);
+    physObject(const float& posX, const float& posY, int texture);
+    physObject(int texture);
     
     phyVector* getVector();
     
