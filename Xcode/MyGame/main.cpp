@@ -21,6 +21,22 @@
 
 SDL_Window* displayWindow;
 
+void initScene() {
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_ShowCursor(SDL_DISABLE);
+    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+    SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
+    SDL_GL_MakeCurrent(displayWindow, context);
+#ifdef _WINDOWS
+    glewInit();
+#endif
+    
+    glViewport(0, 0, 1280, 720);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 GLuint LoadTexture(const char *filePath) {
     int w,h,comp;
     unsigned char* image = stbi_load(filePath, &w, &h, &comp, STBI_rgb_alpha);
@@ -36,22 +52,6 @@ GLuint LoadTexture(const char *filePath) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     stbi_image_free(image);
     return retTexture;
-}
-
-void initScene() {
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_ShowCursor(SDL_DISABLE);
-    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
-    SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
-    SDL_GL_MakeCurrent(displayWindow, context);
-#ifdef _WINDOWS
-    glewInit();
-#endif
-    
-    glViewport(0, 0, 1280, 720);
-    
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, const int& texture, float *Verts, float *texVerts) {
@@ -109,13 +109,13 @@ int main(int argc, char *argv[])
     
     float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
     
-    float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
+    GLfloat skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png")));
-    float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
+    GLfloat groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png")));
-    float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
+    GLfloat ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
     physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png")));
-    float cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
+    GLfloat cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png")));
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
