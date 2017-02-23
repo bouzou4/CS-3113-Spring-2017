@@ -40,6 +40,7 @@ GLuint LoadTexture(const char *filePath) {
 
 void initScene() {
     SDL_Init(SDL_INIT_VIDEO);
+    SDL_ShowCursor(SDL_DISABLE);
     displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -108,22 +109,26 @@ int main(int argc, char *argv[])
     
     float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
     
-    
-    float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
-    physObject ufo;
-    float boxVerts[] ={-0.2, -0.5, 0.2, -0.5, 0.2, 0.5, -0.2, -0.5, 0.2, 0.5, -0.2, 0.5};
-    physObject box(-3.3, 0);
     float skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
     gameObject sky(0, 0.25);
     float groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
     gameObject ground(0, -1.75);
+    float ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
+    physObject ufo;
+    float cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
+    gameObject cursor;
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
+    float pixelRatioX(7.1/1280.0);
+    float pixelRatioY(4.0/720.0);
     
     //load all relevant textures
     GLuint ufoTexture = LoadTexture(RESOURCE_FOLDER"ufo.png");
     GLuint grassTexture = LoadTexture(RESOURCE_FOLDER"grass.png");
     GLuint skyTexture = LoadTexture(RESOURCE_FOLDER"sky.png");
+    GLuint cursorTexture = LoadTexture(RESOURCE_FOLDER"cursor.png");
+    
+    
     
     glUseProgram(program.programID);
                           
@@ -144,9 +149,12 @@ int main(int argc, char *argv[])
         glEnableVertexAttribArray(program.texCoordAttribute);
         
         drawTexturedObj(&program, sky.getMatrix(), &skyTexture, skyVerts, texCoords);
-        drawTexturedObj(&program, ground.getMatrix(), &grassTexture, groundVerts, texCoords);
         drawTexturedObj(&program, ufo.getMatrix(), &ufoTexture, ufoVerts, texCoords);
-        drawTexturedObj(&program, box.getMatrix(), &ufoTexture, boxVerts, texCoords);
+        drawTexturedObj(&program, ground.getMatrix(), &grassTexture, groundVerts, texCoords);
+        drawTexturedObj(&program, cursor.getMatrix(), &cursorTexture, cursorVerts, texCoords);
+        
+        //Mouse Input
+        
         
         //Keyboard Input
         if(keys[SDL_SCANCODE_LEFT]) {
@@ -170,14 +178,14 @@ int main(int argc, char *argv[])
         if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
         }
-        if (boxCollision(*ufo.getPos(), .5, .5, *box.getPos(), 1, 0.4) || ((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
+        if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
             ufo.getVector()->flipX();
         }
         
         sky.drawObj();
         ground.drawObj();
-        box.moveObj();
         ufo.moveObj();
+        cursor.drawObj();
         
         
         //switch to game window
@@ -186,6 +194,10 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
+            }
+            else if(event.type == SDL_MOUSEMOTION) {
+                cursor.getPos()->setX((event.motion.x * pixelRatioX) - 3.45);
+                cursor.getPos()->setY(((event.motion.y * pixelRatioY) - 1.9)*-1);
             }
             else if(event.type == SDL_KEYDOWN) {
                 if(event.key.keysym.scancode == SDL_SCANCODE_E) {
