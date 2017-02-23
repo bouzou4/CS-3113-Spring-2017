@@ -119,6 +119,8 @@ int main(int argc, char *argv[])
     GLuint grassTexture = LoadTexture(RESOURCE_FOLDER"grass.png");
     GLuint skyTexture = LoadTexture(RESOURCE_FOLDER"sky.png");
     
+    int p1Score, p2Score = 0;
+    
     glUseProgram(program.programID);
                           
     while (!done) {
@@ -150,23 +152,19 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, box2.getMatrix(), &ufoTexture, boxVerts, texCoords);
         
         //Keyboard Input
-        if(keys[SDL_SCANCODE_LEFT]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(180);
+        if (keys[SDL_SCANCODE_W]) {
+            box1.getPos()->transformY(0.03);
         }
-        if(keys[SDL_SCANCODE_RIGHT]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(0);
+        if (keys[SDL_SCANCODE_S]) {
+            box1.getPos()->transformY(-0.03);
         }
         if (keys[SDL_SCANCODE_UP]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(90);
+            box2.getPos()->transformY(0.03);
         }
         if (keys[SDL_SCANCODE_DOWN]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(270);
+            box2.getPos()->transformY(-0.03);
         }
-        
+              
         //Collision Rules
         if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
@@ -174,13 +172,30 @@ int main(int argc, char *argv[])
         if (boxCollision(*ufo.getPos(), .5, .5, *box1.getPos(), 1, 0.4) || boxCollision(*ufo.getPos(), .5, .5, *box2.getPos(), 1, 0.4)) {
             ufo.getVector()->flipX();
         }
+        if ((ufo.getPos()->getX() + 0.25) > 3.55) {
+            //P1 Win
+            ufo.getVector()->setVelocity(0);
+            ufo.getPos()->setX(0);
+            ufo.getPos()->setY(0);
+            p1Score++;
+            std::cout << "Score: \tPlayer 1: " << p1Score << "\tPlayer 2: " << p2Score << std::endl;
+            
+        }
+        if ((ufo.getPos()->getX() - 0.25) < -3.55) {
+            //P2 Win
+            ufo.getVector()->setVelocity(0);
+            ufo.getPos()->setX(0);
+            ufo.getPos()->setY(0);
+            p2Score++;
+            std::cout << "Score: \tPlayer 1: " << p1Score << "\tPlayer 2: " << p2Score << std::endl;
+        }
         
+        //Draw Objects
         sky.drawObj();
         ground.drawObj();
         box1.moveObj();
         box2.moveObj();
         ufo.moveObj();
-        
         
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);
@@ -195,6 +210,12 @@ int main(int argc, char *argv[])
                 }
                 else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
                     ufo.getVector()->rotateCCW();
+                }
+                else if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                    if (ufo.getVector()->getCompoundVelocity() == 0) {
+                        ufo.getVector()->setAngle(((float)rand()/RAND_MAX) * 360);
+                        ufo.getVector()->setVelocity(0.08);
+                    }
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
                     ufo.getVector()->setVelocity(0);
