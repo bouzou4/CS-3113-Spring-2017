@@ -14,7 +14,13 @@ gameObject::gameObject(int texture, int height, int width) : position(), texture
 Matrix* gameObject::getMatrix() {return &modelMatrix;}
 Coord* gameObject::getPos() {return &position;}
 int gameObject::getTexture() {return texture;}
+int gameObject::getHeight() {return height;}
+int gameObject::getWidth() {return width;}
+float gameObject::getSize() {return size;}
+float gameObject::getAspect() {return width/height;}
 void gameObject::setSize(const float& val) {size = val;}
+
+void gameObject::skewWidth(const float& val) {width *= val;}
 
 void gameObject::drawObj(ShaderProgram* program) {
     program->setModelMatrix(modelMatrix);
@@ -23,7 +29,7 @@ void gameObject::drawObj(ShaderProgram* program) {
     glBindTexture(GL_TEXTURE_2D, texture);
     
     GLfloat texCoords[] = {0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1};
-    float aspect = width / height;
+    float aspect = getAspect();
     
     float vertices[] = {
         -0.5f * size * aspect, -0.5f * size,

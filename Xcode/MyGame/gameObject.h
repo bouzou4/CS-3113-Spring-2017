@@ -33,8 +33,10 @@ public:
     int getTexture();
     int getHeight();
     int getWidth();
-    int getSize();
+    float getSize();
+    float getAspect();
     void setSize(const float& val);
     
+    void skewWidth(const float& val);
     void drawObj(ShaderProgram* program);
 };

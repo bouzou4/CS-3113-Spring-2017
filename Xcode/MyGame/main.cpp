@@ -133,9 +133,14 @@ int main(int argc, char *argv[])
     Matrix viewMatrix;
     
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
+    sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
+    ground.skewWidth(16.0);
+    ground.setSize(0.5);
     physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png", objHeight, objWidth)), objHeight, objWidth);
+    ufo.setSize(0.5);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
+    cursor.setSize(0.3);
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     float pixelRatioX(7.1/1280.0);
@@ -156,14 +161,6 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        
-        //Mouse Input
-        
-        Matrix testMatrix;
-        program.setModelMatrix(testMatrix);
-        testMatrix.identity();
-        textures["enemyBlack1"]->draw(&program);
-        
         //Keyboard Input
         if(keys[SDL_SCANCODE_LEFT]) {
             ufo.getVector()->setVelocity(0.03);
@@ -183,7 +180,7 @@ int main(int argc, char *argv[])
         }
         
         //Collision Rules
-        if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 7.1) || ((ufo.getPos()->getY() + 0.25) > 2)) {
+        if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo.getPos()->getY() + 0.25) > 2)) {
             ufo.getVector()->flipY();
         }
         if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
@@ -194,6 +191,11 @@ int main(int argc, char *argv[])
         ground.drawObj(&program);
         ufo.moveObj(&program);
         cursor.drawObj(&program);
+        
+        Matrix testMatrix;
+        program.setModelMatrix(testMatrix);
+        testMatrix.identity();
+        textures["enemyBlack1"]->draw(&program);
         
         
         //switch to game window
