@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "phyVector.h"
-#include "Matrix.h"
+#include "ShaderProgram.h"
 
 #endif /* gameObject_h */
 
@@ -20,16 +20,21 @@ protected:
     Coord position;
     Matrix modelMatrix;
     int texture;
+    int height;
+    int width;
+    float size;
     
 public:
-    gameObject(const float& posX, const float& posY, int texture);
-    gameObject(int texture);
+    gameObject(const float& posX, const float& posY, int texture, int height, int width);
+    gameObject(int texture, int height, int width);
     
     Matrix* getMatrix();
     Coord* getPos();
     int getTexture();
+    int getHeight();
+    int getWidth();
+    int getSize();
+    void setSize(const float& val);
     
-    void setCenter(float* verts, const int& size);
-    
-    void drawObj();
+    void drawObj(ShaderProgram* program);
 };

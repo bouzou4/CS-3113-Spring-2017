@@ -24,8 +24,8 @@
 
 SDL_Window* displayWindow;
 
-GLuint LoadTexture(const char *filePath) {
-    int w,h,comp;
+GLuint LoadTexture(const char *filePath, int& h, int& w) {
+    int comp;
     unsigned char* image = stbi_load(filePath, &w, &h, &comp, STBI_rgb_alpha);
     if(image == NULL) {
         std::cout << "Unable to load image. Make sure the path is correct\n";
@@ -41,7 +41,7 @@ GLuint LoadTexture(const char *filePath) {
     return retTexture;
 }
 
-void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const GLuint& texID) {
+void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const GLuint& texID, float texSize) {
     pugi::xml_document xFile;
     pugi::xml_parse_result result = xFile.load_file(RESOURCE_FOLDER"texts/sprites.xml");
     std::string tempName = "";
@@ -52,7 +52,7 @@ void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const
         tempName = xIt->attribute("name").value();
         tempName = tempName.substr(0, tempName.find_last_of("."));
         
-        tSprite = new SpriteSheetTexture(texID, atof(xIt->attribute("x").value())/size, atof(xIt->attribute("y").value())/size, atof(xIt->attribute("width").value())/size, atof(xIt->attribute("height").value())/size, 3);
+        tSprite = new SpriteSheetTexture(texID, atof(xIt->attribute("x").value())/size, atof(xIt->attribute("y").value())/size, atof(xIt->attribute("width").value())/size, atof(xIt->attribute("height").value())/size, texSize);
         textures[tempName] = tSprite;
         std::cout << tempName << std::endl;
     }
@@ -122,25 +122,20 @@ int main(int argc, char *argv[])
     std::map<std::string, SpriteSheetTexture*> textures;
     
     float lastFrameTicks = 0.0f;
+    int objWidth, objHeight;
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
-    GLuint spriteshit = LoadTexture(RESOURCE_FOLDER"texts/sprites.png");
-    loadSpriteSheet(textures, spriteshit);
+    GLuint spritesheet = LoadTexture(RESOURCE_FOLDER"texts/sprites.png", objWidth, objHeight);
+    loadSpriteSheet(textures, spritesheet, 1);
     
     Matrix projectionMatrix;
     Matrix viewMatrix;
     
-    float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
-    
-    GLfloat skyVerts[] = {-3.55, -1.75, 3.55, -1.75, 3.55, 1.75, -3.55, -1.75, 3.55, 1.75, -3.55, 1.75};
-    gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png")));
-    GLfloat groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
-    gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png")));
-    GLfloat ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
-    physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png")));
-    GLfloat cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
-    gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png")));
+    gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
+    gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
+    physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png", objHeight, objWidth)), objHeight, objWidth);
+    gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
     float pixelRatioX(7.1/1280.0);
@@ -161,13 +156,6 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-        glEnableVertexAttribArray(program.texCoordAttribute);
-        
-        drawTexturedObj(&program, sky.getMatrix(), sky.getTexture(), skyVerts, texCoords);
-        drawTexturedObj(&program, ufo.getMatrix(), ufo.getTexture(), ufoVerts, texCoords);
-        drawTexturedObj(&program, ground.getMatrix(), ground.getTexture(), groundVerts, texCoords);
-        drawTexturedObj(&program, cursor.getMatrix(), cursor.getTexture(), cursorVerts, texCoords);
         
         //Mouse Input
         
@@ -202,10 +190,10 @@ int main(int argc, char *argv[])
             ufo.getVector()->flipX();
         }
         
-        sky.drawObj();
-        ground.drawObj();
-        ufo.moveObj();
-        cursor.drawObj();
+        sky.drawObj(&program);
+        ground.drawObj(&program);
+        ufo.moveObj(&program);
+        cursor.drawObj(&program);
         
         
         //switch to game window

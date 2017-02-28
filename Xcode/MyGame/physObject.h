@@ -18,11 +18,11 @@ class physObject : public gameObject{
     phyVector vectr;
     
 public:
-    physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture);
-    physObject(const float& posX, const float& posY, int texture);
-    physObject(int texture);
+    physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width);
+    physObject(const float& posX, const float& posY, int texture, int height, int width);
+    physObject(int texture, int height, int width);
     
     phyVector* getVector();
     
-    void moveObj();
+    void moveObj(ShaderProgram* program);
 };

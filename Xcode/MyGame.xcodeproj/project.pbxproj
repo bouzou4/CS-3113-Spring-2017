@@ -173,9 +173,10 @@
 				D7B630321E525C150028ADB5 /* sky.png */,
 				D757FB511E5E7A6D00DEFF13 /* cursor.png */,
 				D71B18F61E51F0CA001F4F21 /* grass.png */,
-				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
 				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
+				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
 				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
+				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
 				D7BF0FD91E64F4FC002C8659 /* Vendor */,
 				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
 				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
@@ -189,7 +190,6 @@
 				D757FB4C1E5E33D900DEFF13 /* gameObject.h */,
 				D757FB4E1E5E34EC00DEFF13 /* physObject.cpp */,
 				D757FB4F1E5E34EC00DEFF13 /* physObject.h */,
-				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
 			name = Code;
