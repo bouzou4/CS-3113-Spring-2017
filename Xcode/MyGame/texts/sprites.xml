@@ -1,0 +1,15 @@
+<TextureAtlas size="512" imagePath="sprites.png">
+	<SubTexture name="enemyBlack1.png" x="105" y="172" width="93" height="84"/>
+	<SubTexture name="enemyBlack2.png" x="0" y="86" width="104" height="84"/>
+	<SubTexture name="enemyBlack3.png" x="0" y="172" width="103" height="84"/>
+	<SubTexture name="enemyBlack4.png" x="199" y="0" width="82" height="84"/>
+	<SubTexture name="enemyBlack5.png" x="0" y="344" width="97" height="84"/>
+	<SubTexture name="enemyRed1.png" x="105" y="258" width="93" height="84"/>
+	<SubTexture name="enemyRed2.png" x="0" y="0" width="104" height="84"/>
+	<SubTexture name="enemyRed3.png" x="0" y="258" width="103" height="84"/>
+	<SubTexture name="enemyRed4.png" x="198" y="344" width="82" height="84"/>
+	<SubTexture name="enemyRed5.png" x="99" y="344" width="97" height="84"/>
+	<SubTexture name="laserBlue.png" x="11" y="430" width="9" height="57"/>
+	<SubTexture name="laserRed.png" x="0" y="430" width="9" height="57"/>
+	<SubTexture name="ufo.png" x="106" y="0" width="91" height="91"/>
+</TextureAtlas>

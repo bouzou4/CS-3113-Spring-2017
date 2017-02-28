@@ -28,6 +28,9 @@
 		D757FB521E5E7A6D00DEFF13 /* cursor.png in Resources */ = {isa = PBXBuildFile; fileRef = D757FB511E5E7A6D00DEFF13 /* cursor.png */; };
 		D791C0C61E4A474300B1E968 /* ufo.png in Resources */ = {isa = PBXBuildFile; fileRef = D791C0C51E4A474300B1E968 /* ufo.png */; };
 		D7B630331E525C150028ADB5 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B630321E525C150028ADB5 /* sky.png */; };
+		D7BF0FDD1E64F50C002C8659 /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7BF0FDB1E64F50C002C8659 /* pugixml.cpp */; };
+		D7BF0FE51E64F69B002C8659 /* SpriteSheetTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7BF0FE31E64F69B002C8659 /* SpriteSheetTexture.cpp */; };
+		D7BF0FE71E64F7D8002C8659 /* texts in Resources */ = {isa = PBXBuildFile; fileRef = D7BF0FE61E64F7D8002C8659 /* texts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +66,12 @@
 		D757FB511E5E7A6D00DEFF13 /* cursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cursor.png; sourceTree = "<group>"; };
 		D791C0C51E4A474300B1E968 /* ufo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ufo.png; sourceTree = "<group>"; };
 		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
+		D7BF0FDA1E64F50C002C8659 /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = pugiconfig.hpp; path = Vendor/pugiconfig.hpp; sourceTree = "<group>"; };
+		D7BF0FDB1E64F50C002C8659 /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pugixml.cpp; path = Vendor/pugixml.cpp; sourceTree = "<group>"; };
+		D7BF0FDC1E64F50C002C8659 /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = pugixml.hpp; path = Vendor/pugixml.hpp; sourceTree = "<group>"; };
+		D7BF0FE31E64F69B002C8659 /* SpriteSheetTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteSheetTexture.cpp; sourceTree = "<group>"; };
+		D7BF0FE41E64F69B002C8659 /* SpriteSheetTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteSheetTexture.h; sourceTree = "<group>"; };
+		D7BF0FE61E64F7D8002C8659 /* texts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = texts; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +141,7 @@
 		6D5A86B419AE5C710066C1FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D7BF0FE61E64F7D8002C8659 /* texts */,
 				6D5A86C519AE5C710066C1FD /* Images.xcassets */,
 				6D5A86B519AE5C710066C1FD /* MyGame-Info.plist */,
 				6D5A86B619AE5C710066C1FD /* InfoPlist.strings */,
@@ -166,10 +176,13 @@
 				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
 				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
 				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
+				D7BF0FD91E64F4FC002C8659 /* Vendor */,
 				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
 				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
 				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
 				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
+				D7BF0FE31E64F69B002C8659 /* SpriteSheetTexture.cpp */,
+				D7BF0FE41E64F69B002C8659 /* SpriteSheetTexture.h */,
 				D750F2171E54A5F100A22748 /* phyVector.cpp */,
 				D750F2181E54A5F100A22748 /* phyVector.h */,
 				D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */,
@@ -180,6 +193,16 @@
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
 			name = Code;
+			sourceTree = "<group>";
+		};
+		D7BF0FD91E64F4FC002C8659 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				D7BF0FDA1E64F50C002C8659 /* pugiconfig.hpp */,
+				D7BF0FDB1E64F50C002C8659 /* pugixml.cpp */,
+				D7BF0FDC1E64F50C002C8659 /* pugixml.hpp */,
+			);
+			name = Vendor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +267,7 @@
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
 				6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */,
+				D7BF0FE71E64F7D8002C8659 /* texts in Resources */,
 				D757FB521E5E7A6D00DEFF13 /* cursor.png in Resources */,
 				D71B18F71E51F0CA001F4F21 /* grass.png in Resources */,
 			);
@@ -256,10 +280,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7BF0FE51E64F69B002C8659 /* SpriteSheetTexture.cpp in Sources */,
 				D757FB501E5E34EC00DEFF13 /* physObject.cpp in Sources */,
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
 				D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */,
+				D7BF0FDD1E64F50C002C8659 /* pugixml.cpp in Sources */,
 				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
 				D757FB4D1E5E33D900DEFF13 /* gameObject.cpp in Sources */,
 			);

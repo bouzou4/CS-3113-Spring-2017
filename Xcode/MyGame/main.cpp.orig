@@ -24,6 +24,22 @@
 
 SDL_Window* displayWindow;
 
+void initScene() {
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_ShowCursor(SDL_DISABLE);
+    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+    SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
+    SDL_GL_MakeCurrent(displayWindow, context);
+#ifdef _WINDOWS
+    glewInit();
+#endif
+    
+    glViewport(0, 0, 1280, 720);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 GLuint LoadTexture(const char *filePath) {
     int w,h,comp;
     unsigned char* image = stbi_load(filePath, &w, &h, &comp, STBI_rgb_alpha);
@@ -41,6 +57,9 @@ GLuint LoadTexture(const char *filePath) {
     return retTexture;
 }
 
+<<<<<<< Updated upstream
+void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, const int& texture, float *Verts, float *texVerts) {
+=======
 void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const GLuint& texID) {
     pugi::xml_document xFile;
     pugi::xml_parse_result result = xFile.load_file(RESOURCE_FOLDER"texts/sprites.xml");
@@ -73,7 +92,8 @@ void initScene() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, int texture, float *Verts, float *texVerts) {
+void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, GLuint *texture, float *Verts, float *texVerts) {
+>>>>>>> Stashed changes
     program->setModelMatrix(*modelMatrix);
     modelMatrix->identity();
     
@@ -170,6 +190,7 @@ int main(int argc, char *argv[])
         drawTexturedObj(&program, cursor.getMatrix(), cursor.getTexture(), cursorVerts, texCoords);
         
         //Mouse Input
+        
         
         Matrix testMatrix;
         program.setModelMatrix(testMatrix);
