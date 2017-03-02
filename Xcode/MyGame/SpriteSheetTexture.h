@@ -15,17 +15,22 @@
 #endif /* SpriteSheetTexture_h */
 
 class SpriteSheetTexture {
-private:
     float size;
     unsigned int textureID;
     float u;
     float v;
-    float width;
     float height;
+    float width;
+    
+private:
+    float* texCoords;
     
 public:
     SpriteSheetTexture(unsigned int textureID, float u, float v, float width, float height, float size);
+    SpriteSheetTexture(SpriteSheetTexture* sprite);
     
-    void draw(ShaderProgram *program);
-
+    float getHeight();
+    float getWidth();
+    
+    float* getTexCoordsPtr();
 };

@@ -8,8 +8,10 @@
 
 #include "gameObject.h"
 
-gameObject::gameObject(const float& posX, const float& posY, int texture, int height, int width) : position(posX, posY), texture(texture), height(height), width(width), size(1.0) {}
-gameObject::gameObject(int texture, int height, int width) : position(), texture(texture), height(height), width(width), size(1.0) {}
+gameObject::gameObject(const float& posX, const float& posY, int texture, int height, int width) : position(posX, posY), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
+gameObject::gameObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite) : position(posX, posY), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
+gameObject::gameObject(int texture, int height, int width) : position(), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
+gameObject::gameObject(int texture, SpriteSheetTexture* sprite) : position(), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
 
 Matrix* gameObject::getMatrix() {return &modelMatrix;}
 Coord* gameObject::getPos() {return &position;}
@@ -28,7 +30,17 @@ void gameObject::drawObj(ShaderProgram* program) {
     
     glBindTexture(GL_TEXTURE_2D, texture);
     
-    GLfloat texCoords[] = {0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1};
+    float texCoords[12];
+    
+    if (sprite == nullptr) {
+        float tempCoords[] = {0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1};
+        memcpy(&texCoords, &tempCoords, sizeof(tempCoords));
+    }
+    else {
+        memcpy(&texCoords, sprite->getTexCoordsPtr(), sizeof(texCoords));
+    }
+    
+    
     float aspect = getAspect();
     
     float vertices[] = {

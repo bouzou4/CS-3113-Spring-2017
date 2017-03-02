@@ -12,8 +12,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "ShaderProgram.h"
-#include "SpriteSheetTexture.h"
 #include "physObject.h"
 
 #ifdef _WINDOWS
@@ -43,7 +41,7 @@ GLuint LoadTexture(const char *filePath, int& h, int& w) {
 
 void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const GLuint& texID, float texSize) {
     pugi::xml_document xFile;
-    pugi::xml_parse_result result = xFile.load_file(RESOURCE_FOLDER"texts/sprites.xml");
+    xFile.load_file(RESOURCE_FOLDER"texts/sprites.xml");
     std::string tempName = "";
     float size = atof(xFile.first_child().attribute("size").value());
     SpriteSheetTexture* tSprite;
@@ -71,22 +69,6 @@ void initScene() {
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void drawTexturedObj(ShaderProgram *program, Matrix *modelMatrix, int texture, float *Verts, float *texVerts) {
-    program->setModelMatrix(*modelMatrix);
-    modelMatrix->identity();
-    
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, Verts);
-    glEnableVertexAttribArray(program->positionAttribute);
-    
-    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texVerts);
-    glEnableVertexAttribArray(program->texCoordAttribute);
-    
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDisableVertexAttribArray(program->positionAttribute);
-    glDisableVertexAttribArray(program->texCoordAttribute);
 }
 
 bool boxCollision(Coord& pos1, float height1, float width1, Coord& pos2, float height2, float width2) {
@@ -119,19 +101,21 @@ int main(int argc, char *argv[])
     SDL_Event event;
     bool done = false;
     
-    std::map<std::string, SpriteSheetTexture*> textures;
-    
+    std::map<std::string, SpriteSheetTexture*> sprites;
     float lastFrameTicks = 0.0f;
     int objWidth, objHeight;
+    Matrix projectionMatrix;
+    Matrix viewMatrix;
+    
+    projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
+    float pixelRatioX(7.1/1280.0);
+    float pixelRatioY(4.0/720.0);
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
     GLuint spritesheet = LoadTexture(RESOURCE_FOLDER"texts/sprites.png", objWidth, objHeight);
-    loadSpriteSheet(textures, spritesheet, 1);
-    
-    Matrix projectionMatrix;
-    Matrix viewMatrix;
-    
+    loadSpriteSheet(sprites, spritesheet, 1);
+    gameObject ship(spritesheet, sprites["enemyBlack4"]);
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
@@ -141,10 +125,6 @@ int main(int argc, char *argv[])
     ufo.setSize(0.5);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
-    
-    projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
-    float pixelRatioX(7.1/1280.0);
-    float pixelRatioY(4.0/720.0);
     
     glUseProgram(program.programID);
                           
@@ -189,13 +169,9 @@ int main(int argc, char *argv[])
         
         sky.drawObj(&program);
         ground.drawObj(&program);
+        ship.drawObj(&program);
         ufo.moveObj(&program);
         cursor.drawObj(&program);
-        
-        Matrix testMatrix;
-        program.setModelMatrix(testMatrix);
-        testMatrix.identity();
-        textures["enemyBlack1"]->draw(&program);
         
         
         //switch to game window

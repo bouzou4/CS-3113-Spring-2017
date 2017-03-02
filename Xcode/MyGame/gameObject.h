@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "phyVector.h"
 #include "ShaderProgram.h"
+#include "SpriteSheetTexture.h"
 
 #endif /* gameObject_h */
 
@@ -20,13 +21,16 @@ protected:
     Coord position;
     Matrix modelMatrix;
     int texture;
-    int height;
-    int width;
+    SpriteSheetTexture* sprite;
+    float height;
+    float width;
     float size;
     
 public:
     gameObject(const float& posX, const float& posY, int texture, int height, int width);
+    gameObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite);
     gameObject(int texture, int height, int width);
+    gameObject(int texture, SpriteSheetTexture* sprite);
     
     Matrix* getMatrix();
     Coord* getPos();

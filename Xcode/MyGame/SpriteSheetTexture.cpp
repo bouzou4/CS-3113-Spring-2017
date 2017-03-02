@@ -8,10 +8,19 @@
 
 #include "SpriteSheetTexture.h"
 
-SpriteSheetTexture::SpriteSheetTexture(unsigned int textureID, float u, float v, float width, float height, float size) : textureID(textureID), u(u), v(v), width(width), height(height), size(size) {}
+SpriteSheetTexture::SpriteSheetTexture(unsigned int textureID, float u, float v, float width, float height, float size) : textureID(textureID), u(u), v(v), width(width), height(height), size(size) {
+    float coordMem[12];
+    texCoords = &coordMem[0];
+}
+SpriteSheetTexture::SpriteSheetTexture(SpriteSheetTexture* sprite) : textureID(sprite->textureID), u(sprite->u), v(sprite->v), height(sprite->height), width(sprite->width), size(sprite->size) {
+    float coordMem[12];
+    texCoords = &coordMem[0];
+}
 
-void SpriteSheetTexture::draw(ShaderProgram *program) {
-    glBindTexture(GL_TEXTURE_2D, textureID);
+float SpriteSheetTexture::getHeight() {return height;}
+float SpriteSheetTexture::getWidth() {return width;}
+
+float* SpriteSheetTexture::getTexCoordsPtr() {
     
     GLfloat texCoords[] = {
         u, v+height,
@@ -22,22 +31,6 @@ void SpriteSheetTexture::draw(ShaderProgram *program) {
         u+width, v+height
     };
     
-    float aspect = width / height;
-    float vertices[] = {
-        -0.5f * size * aspect, -0.5f * size,
-        0.5f * size * aspect, 0.5f * size,
-        -0.5f * size * aspect, 0.5f * size,
-        0.5f * size * aspect, 0.5f * size,
-        -0.5f * size * aspect, -0.5f * size ,
-        0.5f * size * aspect, -0.5f * size};
-    
-    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-    glEnableVertexAttribArray(program->positionAttribute);
-    
-    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-    glEnableVertexAttribArray(program->texCoordAttribute);
-    
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDisableVertexAttribArray(program->positionAttribute);
-    glDisableVertexAttribArray(program->texCoordAttribute);
+    memcpy(texCoords, &texCoords, sizeof(texCoords));
+    return texCoords;
 }
