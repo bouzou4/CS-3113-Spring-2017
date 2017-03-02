@@ -115,7 +115,11 @@ int main(int argc, char *argv[])
     
     GLuint spritesheet = LoadTexture(RESOURCE_FOLDER"texts/sprites.png", objWidth, objHeight);
     loadSpriteSheet(sprites, spritesheet, 1);
-    gameObject ship(spritesheet, sprites["enemyBlack4"]);
+    gameObject ship1(-2, 0.25, spritesheet, sprites["enemyBlack1"]);
+    gameObject ship2(-1, 0.25, spritesheet, sprites["enemyBlack2"]);
+    gameObject ship3(0, 0.25, spritesheet, sprites["enemyBlack3"]);
+    gameObject ship4(1, 0.25, spritesheet, sprites["enemyBlack4"]);
+    gameObject ship5(2, 0.25, spritesheet, sprites["enemyBlack5"]);
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
@@ -169,7 +173,11 @@ int main(int argc, char *argv[])
         
         sky.drawObj(&program);
         ground.drawObj(&program);
-        ship.drawObj(&program);
+        ship1.drawObj(&program);
+        ship2.drawObj(&program);
+        ship3.drawObj(&program);
+        ship4.drawObj(&program);
+        ship5.drawObj(&program);
         ufo.moveObj(&program);
         cursor.drawObj(&program);
         

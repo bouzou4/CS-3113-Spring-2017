@@ -34,6 +34,5 @@ SpriteSheetTexture::SpriteSheetTexture(SpriteSheetTexture* sprite) : textureID(s
 
 float SpriteSheetTexture::getHeight() {return height;}
 float SpriteSheetTexture::getWidth() {return width;}
-
 float* SpriteSheetTexture::getTexCoordsPtr() {return texCoords;
 }
