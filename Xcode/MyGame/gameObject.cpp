@@ -30,10 +30,10 @@ void gameObject::drawObj(ShaderProgram* program) {
     
     glBindTexture(GL_TEXTURE_2D, texture);
     
-    float texCoords[12];
+    GLfloat texCoords[12];
     
     if (sprite == nullptr) {
-        float tempCoords[] = {0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1};
+        GLfloat tempCoords[] = {0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1};
         memcpy(&texCoords, &tempCoords, sizeof(tempCoords));
     }
     else {
@@ -41,15 +41,16 @@ void gameObject::drawObj(ShaderProgram* program) {
     }
     
     
-    float aspect = getAspect();
+    GLfloat aspect = getAspect();
     
-    float vertices[] = {
-        -0.5f * size * aspect, -0.5f * size,
-        0.5f * size * aspect, 0.5f * size,
-        -0.5f * size * aspect, 0.5f * size,
-        0.5f * size * aspect, 0.5f * size,
-        -0.5f * size * aspect, -0.5f * size ,
-        0.5f * size * aspect, -0.5f * size};
+    GLfloat vertices[] = {
+        -0.5f * size * aspect,  -0.5f * size,
+        0.5f * size * aspect,   0.5f * size,
+        -0.5f * size * aspect,  0.5f * size,
+        0.5f * size * aspect,   0.5f * size,
+        -0.5f * size * aspect,  -0.5f * size,
+        0.5f * size * aspect,   -0.5f * size
+    };
     
     glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
     glEnableVertexAttribArray(program->positionAttribute);

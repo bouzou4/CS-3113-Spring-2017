@@ -39,20 +39,38 @@ GLuint LoadTexture(const char *filePath, int& h, int& w) {
     return retTexture;
 }
 
-void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& textures, const GLuint& texID, float texSize) {
+void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& sprites, const GLuint& texID, const std::string& name) {
     pugi::xml_document xFile;
-    xFile.load_file(RESOURCE_FOLDER"texts/sprites.xml");
+    xFile.load_file((RESOURCE_FOLDER"texts/" + name + ".xml").c_str());
     std::string tempName = "";
-    float size = atof(xFile.first_child().attribute("size").value());
+    float height = atof(xFile.first_child().attribute("height").value());
+    float width = atof(xFile.first_child().attribute("width").value());
     SpriteSheetTexture* tSprite;
     
     for (pugi::xml_node_iterator xIt = xFile.first_child().begin(); xIt != xFile.first_child().end(); ++xIt) {
         tempName = xIt->attribute("name").value();
         tempName = tempName.substr(0, tempName.find_last_of("."));
         
-        tSprite = new SpriteSheetTexture(texID, atof(xIt->attribute("x").value())/size, atof(xIt->attribute("y").value())/size, atof(xIt->attribute("width").value())/size, atof(xIt->attribute("height").value())/size, texSize);
-        textures[tempName] = tSprite;
+        tSprite = new SpriteSheetTexture(texID, atof(xIt->attribute("x").value())/width, atof(xIt->attribute("y").value())/height, atof(xIt->attribute("height").value())/height, atof(xIt->attribute("width").value())/width, 1.0);
+        sprites[tempName] = tSprite;
         std::cout << tempName << std::endl;
+    }
+}
+
+void loadSpacedSpriteSheet(std::map<size_t, SpriteSheetTexture*>& sprites, const GLuint& texID, const GLfloat& height, const GLfloat& width, const GLfloat& rows, const GLfloat& columns) {
+    SpriteSheetTexture* tSprite;
+    size_t index = 0;
+    const float sprHeight = height/rows;
+    const float sprWidth = width/columns;
+    const float tempHeight = sprHeight/height;
+    const float tempWidth = sprWidth/width;
+    
+    for (size_t y = 0; y < columns; y++) {
+        for (size_t x = 0; x < rows; x++) {
+            tSprite = new SpriteSheetTexture(texID, x*tempWidth, y*tempHeight, tempHeight, tempWidth, 1.0);
+            sprites[index] = tSprite;
+            index++;
+        }
     }
 }
 
@@ -101,7 +119,6 @@ int main(int argc, char *argv[])
     SDL_Event event;
     bool done = false;
     
-    std::map<std::string, SpriteSheetTexture*> sprites;
     float lastFrameTicks = 0.0f;
     int objWidth, objHeight;
     Matrix projectionMatrix;
@@ -113,13 +130,20 @@ int main(int argc, char *argv[])
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
-    GLuint spritesheet = LoadTexture(RESOURCE_FOLDER"texts/sprites.png", objWidth, objHeight);
-    loadSpriteSheet(sprites, spritesheet, 1);
-    gameObject ship1(-2, 0.25, spritesheet, sprites["enemyBlack1"]);
-    gameObject ship2(-1, 0.25, spritesheet, sprites["enemyBlack2"]);
-    gameObject ship3(0, 0.25, spritesheet, sprites["enemyBlack3"]);
-    gameObject ship4(1, 0.25, spritesheet, sprites["enemyBlack4"]);
-    gameObject ship5(2, 0.25, spritesheet, sprites["enemyBlack5"]);
+    std::map<std::string, SpriteSheetTexture*> shipSprites;
+    std::map<size_t, SpriteSheetTexture*> myFontSprites;
+    
+    GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
+    loadSpacedSpriteSheet(myFontSprites, myFontSheet, objHeight, objWidth, 16, 16);
+    GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
+    loadSpriteSheet(shipSprites, shipSpriteSheet, "shipSprites");
+    
+    gameObject letter(-1,-1, myFontSheet, myFontSprites[34]);
+    gameObject ship1(-2, 0.25, shipSpriteSheet, shipSprites["enemyBlack1"]);
+    gameObject ship2(-1, 0.25, shipSpriteSheet, shipSprites["enemyBlack2"]);
+    gameObject ship3(0, 0.25, shipSpriteSheet, shipSprites["enemyBlack3"]);
+    gameObject ship4(1, 0.25, shipSpriteSheet, shipSprites["enemyBlack4"]);
+    gameObject ship5(2, 0.25, shipSpriteSheet, shipSprites["enemyBlack5"]);
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
@@ -179,6 +203,7 @@ int main(int argc, char *argv[])
         ship4.drawObj(&program);
         ship5.drawObj(&program);
         ufo.moveObj(&program);
+        letter.drawObj(&program);
         cursor.drawObj(&program);
         
         
