@@ -23,7 +23,7 @@ class SpriteSheetTexture {
     float width;
     
 private:
-    float* texCoords;
+    float texCoords[12];
     
 public:
     SpriteSheetTexture(unsigned int textureID, float u, float v, float width, float height, float size);
