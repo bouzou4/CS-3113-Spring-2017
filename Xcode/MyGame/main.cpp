@@ -165,6 +165,9 @@ int main(int argc, char *argv[])
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
+    std::vector<gameObject*> objects;
+    std::vector<gameObject*> enemies;
+    
     std::map<std::string, SpriteSheetTexture*> shipSprites;
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
     
@@ -174,11 +177,9 @@ int main(int argc, char *argv[])
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
     
-    gameObject ship1(-2, 0.25, shipSpriteSheet, shipSprites["enemyBlack1"]);
-    gameObject ship2(-1, 0.25, shipSpriteSheet, shipSprites["enemyBlack2"]);
-    gameObject ship3(0, 0.25, shipSpriteSheet, shipSprites["enemyBlack3"]);
-    gameObject ship4(1, 0.25, shipSpriteSheet, shipSprites["enemyBlack4"]);
-    gameObject ship5(2, 0.25, shipSpriteSheet, shipSprites["enemyBlack5"]);
+    for (size_t x = 0; x < 10; x++) {
+        objects.push_back(new gameObject(x/5.0, x/5.0, shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((x % 4) + 1))]));
+    }
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
@@ -190,7 +191,7 @@ int main(int argc, char *argv[])
     cursor.setSize(0.3);
     
     glUseProgram(program.programID);
-                          
+    
     while (!done) {
         float ticks = (float)SDL_GetTicks()/1000.0f;
         float elapsed = ticks - lastFrameTicks;
@@ -232,11 +233,9 @@ int main(int argc, char *argv[])
         
         sky.drawObj(&program);
         ground.drawObj(&program);
-        ship1.drawObj(&program);
-        ship2.drawObj(&program);
-        ship3.drawObj(&program);
-        ship4.drawObj(&program);
-        ship5.drawObj(&program);
+        for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
+            (*itr)->drawObj(&program);
+        }
         ufo.moveObj(&program);
         DrawText(&program, textMatrix, myFontSprites, myFontSheet, "What's Up Doc?", 0.25, -0.1);
         cursor.drawObj(&program);
