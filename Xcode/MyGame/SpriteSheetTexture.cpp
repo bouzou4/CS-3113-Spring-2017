@@ -8,7 +8,7 @@
 
 #include "SpriteSheetTexture.h"
 
-SpriteSheetTexture::SpriteSheetTexture(unsigned int textureID, float u, float v, float height, float width, float size) : textureID(textureID), u(u), v(v), height(height), width(width), size(size) {
+SpriteSheetTexture::SpriteSheetTexture(float u, float v, float height, float width, float size) : u(u), v(v), height(height), width(width), size(size) {
     float memCoords[] = {
         u, v+height,
         u+width, v,
@@ -20,14 +20,14 @@ SpriteSheetTexture::SpriteSheetTexture(unsigned int textureID, float u, float v,
     memcpy(texCoords, memCoords, sizeof(memCoords));
     
 }
-SpriteSheetTexture::SpriteSheetTexture(SpriteSheetTexture* sprite) : textureID(sprite->textureID), u(sprite->u), v(sprite->v), height(sprite->height), width(sprite->width), size(sprite->size) {
+SpriteSheetTexture::SpriteSheetTexture(SpriteSheetTexture* sprite) : u(sprite->u), v(sprite->v), height(sprite->height), width(sprite->width), size(sprite->size) {
     float memCoords[] = {
-        u, v+height,
-        u+width, v,
-        u, v,
-        u+width, v,
-        u, v+height,
-        u+width, v+height
+        u,          v+height,
+        u+width,    v,
+        u,          v,
+        u+width,    v,
+        u,          v+height,
+        u+width,    v+height
     };
     memcpy(texCoords, memCoords, sizeof(memCoords));
 }

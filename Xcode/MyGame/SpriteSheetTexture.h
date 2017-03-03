@@ -16,7 +16,6 @@
 
 class SpriteSheetTexture {
     float size;
-    unsigned int textureID;
     float u;
     float v;
     float height;
@@ -26,7 +25,7 @@ private:
     float texCoords[12];
     
 public:
-    SpriteSheetTexture(unsigned int textureID, float u, float v, float height, float width, float size);
+    SpriteSheetTexture(float u, float v, float height, float width, float size);
     SpriteSheetTexture(SpriteSheetTexture* sprite);
     
     float getHeight();

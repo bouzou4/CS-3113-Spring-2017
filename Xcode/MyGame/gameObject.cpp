@@ -56,6 +56,7 @@ void gameObject::drawObj(ShaderProgram* program) {
     glEnableVertexAttribArray(program->positionAttribute);
     
     glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    
     glEnableVertexAttribArray(program->texCoordAttribute);
     
     glDrawArrays(GL_TRIANGLES, 0, 6);

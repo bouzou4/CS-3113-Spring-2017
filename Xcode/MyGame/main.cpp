@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 
 #include <map>
+#include <vector>
 #include <math.h>
 #include "pugixml.hpp"
 
@@ -39,7 +40,7 @@ GLuint LoadTexture(const char *filePath, int& h, int& w) {
     return retTexture;
 }
 
-void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& sprites, const GLuint& texID, const std::string& name) {
+void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& sprites, const std::string& name) {
     pugi::xml_document xFile;
     xFile.load_file((RESOURCE_FOLDER"texts/" + name + ".xml").c_str());
     std::string tempName = "";
@@ -51,13 +52,13 @@ void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& sprites, const 
         tempName = xIt->attribute("name").value();
         tempName = tempName.substr(0, tempName.find_last_of("."));
         
-        tSprite = new SpriteSheetTexture(texID, atof(xIt->attribute("x").value())/width, atof(xIt->attribute("y").value())/height, atof(xIt->attribute("height").value())/height, atof(xIt->attribute("width").value())/width, 1.0);
+        tSprite = new SpriteSheetTexture(atof(xIt->attribute("x").value())/width, atof(xIt->attribute("y").value())/height, atof(xIt->attribute("height").value())/height, atof(xIt->attribute("width").value())/width, 1.0);
         sprites[tempName] = tSprite;
         std::cout << tempName << std::endl;
     }
 }
 
-void loadSpacedSpriteSheet(std::map<size_t, SpriteSheetTexture*>& sprites, const GLuint& texID, const GLfloat& height, const GLfloat& width, const GLfloat& rows, const GLfloat& columns) {
+void loadSpacedSpriteSheet(std::map<size_t, SpriteSheetTexture*>& sprites, const GLfloat& height, const GLfloat& width, const GLfloat& rows, const GLfloat& columns) {
     SpriteSheetTexture* tSprite;
     size_t index = 0;
     const float sprHeight = height/rows;
@@ -67,11 +68,45 @@ void loadSpacedSpriteSheet(std::map<size_t, SpriteSheetTexture*>& sprites, const
     
     for (size_t y = 0; y < columns; y++) {
         for (size_t x = 0; x < rows; x++) {
-            tSprite = new SpriteSheetTexture(texID, x*tempWidth, y*tempHeight, tempHeight, tempWidth, 1.0);
+            tSprite = new SpriteSheetTexture(x*tempWidth, y*tempHeight, tempHeight, tempWidth, 1.0);
             sprites[index] = tSprite;
             index++;
         }
     }
+}
+
+void DrawText(ShaderProgram* program, Matrix& modelMatrix, std::map<size_t, SpriteSheetTexture*>& font, const GLuint& fontSheet, const std::string& text, const GLfloat& size, const GLfloat& spacing) {
+    program->setModelMatrix(modelMatrix);
+    modelMatrix.identity();
+    int vertLen = 12 * text.size();
+    std::vector<float> texCoordData;
+    std::vector<float> vertexData;
+    texCoordData.resize(vertLen);
+    for(int i=0; i < text.size(); i++) {
+        int code = (int)text[i];
+        vertexData.insert(vertexData.end(), {
+            ((size+spacing) * i) + (-0.5f * size),  -0.5f * size,
+            ((size+spacing) * i) + (0.5f * size),   0.5f * size,
+            ((size+spacing) * i) + (-0.5f * size),  0.5f * size,
+            ((size+spacing) * i) + (0.5f * size),   0.5f * size,
+            ((size+spacing) * i) + (-0.5f * size),  -0.5f * size,
+            ((size+spacing) * i) + (0.5f * size),   -0.5f * size,
+        });
+        memcpy((texCoordData.data() + (12*i)), font[code]->getTexCoordsPtr(), 48);
+    }
+    glBindTexture(GL_TEXTURE_2D, fontSheet);
+    
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertexData.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoordData.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glDrawArrays(GL_TRIANGLES, 0, vertLen/2);
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+    
+    
 }
 
 void initScene() {
@@ -134,11 +169,11 @@ int main(int argc, char *argv[])
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
     
     GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
-    loadSpacedSpriteSheet(myFontSprites, myFontSheet, objHeight, objWidth, 16, 16);
+    Matrix textMatrix;
+    loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
-    loadSpriteSheet(shipSprites, shipSpriteSheet, "shipSprites");
+    loadSpriteSheet(shipSprites, "shipSprites");
     
-    gameObject letter(-1,-1, myFontSheet, myFontSprites[34]);
     gameObject ship1(-2, 0.25, shipSpriteSheet, shipSprites["enemyBlack1"]);
     gameObject ship2(-1, 0.25, shipSpriteSheet, shipSprites["enemyBlack2"]);
     gameObject ship3(0, 0.25, shipSpriteSheet, shipSprites["enemyBlack3"]);
@@ -203,7 +238,7 @@ int main(int argc, char *argv[])
         ship4.drawObj(&program);
         ship5.drawObj(&program);
         ufo.moveObj(&program);
-        letter.drawObj(&program);
+        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "What's Up Doc?", 0.25, -0.1);
         cursor.drawObj(&program);
         
         
