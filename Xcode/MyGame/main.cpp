@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     loadSpriteSheet(shipSprites, "shipSprites");
     
     for (size_t x = 0; x < 40; x++) {
-        enemies.push_back(new gameObject(-3 + ((x % 10) * 0.5), 1.5 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
+        enemies.push_back(new physObject(-3 + ((x % 10) * 0.5), 1.5 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
         objects.push_back(enemies[x]);
         enemies[x]->setSize(0.4);
     }
@@ -207,22 +207,18 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        //Keyboard Input
+        //Ufo Controls
         if(keys[SDL_SCANCODE_LEFT]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(180);
+            ufo.translateX(-0.03);
         }
         if(keys[SDL_SCANCODE_RIGHT]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(0);
+            ufo.translateX(0.03);
         }
         if (keys[SDL_SCANCODE_UP]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(90);
+            ufo.translateY(0.03);
         }
         if (keys[SDL_SCANCODE_DOWN]) {
-            ufo.getVector()->setVelocity(0.03);
-            ufo.getVector()->setAngle(270);
+            ufo.translateY(-0.03);
         }
         
         //Collision Rules
@@ -239,7 +235,7 @@ int main(int argc, char *argv[])
             (*itr)->drawObj(&program);
         }
         ufo.moveObj(&program);
-        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "What's Up Doc?", 0.25, -0.1);
+        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "just some text", 0.25, -0.12);
         cursor.drawObj(&program);
         
         
