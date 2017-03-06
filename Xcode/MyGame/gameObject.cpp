@@ -20,7 +20,11 @@ int gameObject::getHeight() {return height;}
 int gameObject::getWidth() {return width;}
 float gameObject::getSize() {return size;}
 float gameObject::getAspect() {return width/height;}
-void gameObject::setSize(const float& val) {size = val;}
+void gameObject::setSize(const float& val) {
+    size = val;
+    height *= val;
+    width *= val;
+}
 
 void gameObject::skewWidth(const float& val) {width *= val;}
 
