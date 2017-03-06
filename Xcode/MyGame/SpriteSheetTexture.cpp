@@ -32,7 +32,7 @@ SpriteSheetTexture::SpriteSheetTexture(SpriteSheetTexture* sprite) : u(sprite->u
     memcpy(texCoords, memCoords, sizeof(memCoords));
 }
 
-float SpriteSheetTexture::getHeight() {return height;}
-float SpriteSheetTexture::getWidth() {return width;}
+float SpriteSheetTexture::getHeight() {return height*size;}
+float SpriteSheetTexture::getWidth() {return width*size;}
 float* SpriteSheetTexture::getTexCoordsPtr() {return texCoords;
 }

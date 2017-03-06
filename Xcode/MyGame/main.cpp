@@ -52,9 +52,8 @@ void loadSpriteSheet(std::map<std::string, SpriteSheetTexture*>& sprites, const 
         tempName = xIt->attribute("name").value();
         tempName = tempName.substr(0, tempName.find_last_of("."));
         
-        tSprite = new SpriteSheetTexture(atof(xIt->attribute("x").value())/width, atof(xIt->attribute("y").value())/height, atof(xIt->attribute("height").value())/height, atof(xIt->attribute("width").value())/width, 1.0);
+        tSprite = new SpriteSheetTexture(atof(xIt->attribute("x").value())/width, atof(xIt->attribute("y").value())/height, atof(xIt->attribute("height").value())/height, atof(xIt->attribute("width").value())/width, width);
         sprites[tempName] = tSprite;
-        std::cout << tempName << std::endl;
     }
 }
 
