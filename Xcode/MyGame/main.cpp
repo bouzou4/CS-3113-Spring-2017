@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
     ground.skewWidth(16.0);
     ground.setSize(0.5);
-    physObject ufo(shipSpriteSheet, shipSprites["ufo"]);
+    physObject ufo(0, -1.325, shipSpriteSheet, shipSprites["ufo"]);
     ufo.setSize(0.3);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
@@ -207,26 +207,10 @@ int main(int argc, char *argv[])
         program.setViewMatrix(viewMatrix);
         
         //Ufo Controls
-        if(keys[SDL_SCANCODE_LEFT]) {
+        if(keys[SDL_SCANCODE_LEFT] && (ufo.getPos()->getX() - (ufo.getSize()*0.5) - 0.03) > -3.55)
             ufo.translateX(-0.03);
-        }
-        if(keys[SDL_SCANCODE_RIGHT]) {
+        if(keys[SDL_SCANCODE_RIGHT] && (ufo.getPos()->getX() + (ufo.getSize()*0.5) + 0.03) < 3.55)
             ufo.translateX(0.03);
-        }
-        if (keys[SDL_SCANCODE_UP]) {
-            ufo.translateY(0.03);
-        }
-        if (keys[SDL_SCANCODE_DOWN]) {
-            ufo.translateY(-0.03);
-        }
-        
-        //Collision Rules
-        if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo.getPos()->getY() + 0.25) > 2)) {
-            ufo.getVector()->flipY();
-        }
-        if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
-            ufo.getVector()->flipX();
-        }
         
         sky.drawObj(&program);
         ground.drawObj(&program);
@@ -234,7 +218,7 @@ int main(int argc, char *argv[])
             (*itr)->drawObj(&program);
         }
         ufo.moveObj(&program);
-        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "just some text", 0.25, -0.12);
+        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "Space Invaders!", 0.25, -0.12);
         cursor.drawObj(&program);
         
         
