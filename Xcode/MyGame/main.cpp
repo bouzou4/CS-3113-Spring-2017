@@ -177,16 +177,18 @@ int main(int argc, char *argv[])
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
     
-    for (size_t x = 0; x < 10; x++) {
-        objects.push_back(new gameObject(x/5.0, x/5.0, shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((x % 4) + 1))]));
+    for (size_t x = 0; x < 40; x++) {
+        enemies.push_back(new gameObject(-3 + ((x % 10) * 0.5), 1.5 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
+        objects.push_back(enemies[x]);
+        enemies[x]->setSize(0.4);
     }
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
     ground.skewWidth(16.0);
     ground.setSize(0.5);
-    physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png", objHeight, objWidth)), objHeight, objWidth);
-    ufo.setSize(0.5);
+    physObject ufo(shipSpriteSheet, shipSprites["ufo"]);
+    ufo.setSize(0.3);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
     

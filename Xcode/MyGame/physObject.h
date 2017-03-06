@@ -19,10 +19,17 @@ class physObject : public gameObject{
     
 public:
     physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width);
+    physObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, SpriteSheetTexture* sprite);
     physObject(const float& posX, const float& posY, int texture, int height, int width);
+    physObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite);
     physObject(int texture, int height, int width);
+    physObject(int texture, SpriteSheetTexture* sprite);
     
     phyVector* getVector();
+    
+    void translateX(const float& val);
+    void translateY(const float& val);
+    void translate(const float& x, const float& y);
     
     void moveObj(ShaderProgram* program);
 };
