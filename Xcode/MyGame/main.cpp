@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
     std::vector<gameObject*> objects;
-    std::vector<gameObject*> enemies;
+    std::vector<physObject*> enemies;
     
     std::map<std::string, SpriteSheetTexture*> shipSprites;
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
@@ -175,18 +175,17 @@ int main(int argc, char *argv[])
     loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
-    
     for (size_t x = 0; x < 40; x++) {
-        enemies.push_back(new physObject(-3 + ((x % 10) * 0.5), 1.5 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
+        enemies.push_back(new physObject(-3 + ((x % 10) * 0.5), 1.75 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
         objects.push_back(enemies[x]);
         enemies[x]->setSize(0.4);
     }
-    gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
+    int timeLastX = 0, timeLastY = 0;
+    bool left = false;
+    
+    gameObject sky(int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
-    gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
-    ground.skewWidth(16.0);
-    ground.setSize(0.5);
-    physObject ufo(0, -1.325, shipSpriteSheet, shipSprites["ufo"]);
+    physObject ufo(0, -1.7, shipSpriteSheet, shipSprites["ufo"]);
     ufo.setSize(0.3);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
@@ -212,8 +211,26 @@ int main(int argc, char *argv[])
         if(keys[SDL_SCANCODE_RIGHT] && (ufo.getPos()->getX() + (ufo.getSize()*0.5) + 0.03) < 3.55)
             ufo.translateX(0.03);
         
+        //Enemy Movement
+        if (int(fmod(ticks,7)) == 0 && timeLastY == 6) {
+            for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                (*itr)->translate(0.0, -0.25);
+            }
+            left = !left;
+        }
+        else if (int(fmod(ticks*2,2)) == 0 && timeLastX == 1) {
+            for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                (*itr)->translateX(0.25 * pow(-1, left));
+            }
+        }
+        timeLastX = int(fmod(ticks*2,2));
+        timeLastY = int(fmod(ticks,7));
+        
+        //std::cout << int(fmod(ticks,2)) << std::endl;
+        //std::cout << "shift over: " << fmod(ticks, 10) << std::endl;
+        //std::cout << "shift down: " << int(ticks / 3) << std::endl;
+        
         sky.drawObj(&program);
-        ground.drawObj(&program);
         for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
             (*itr)->drawObj(&program);
         }
