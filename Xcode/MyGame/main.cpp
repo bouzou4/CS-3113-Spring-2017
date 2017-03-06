@@ -111,14 +111,14 @@ void DrawText(ShaderProgram* program, Matrix& modelMatrix, std::map<size_t, Spri
 
 void initScene() {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 #ifdef _WINDOWS
     glewInit();
 #endif
     
-    glViewport(0, 0, 1280, 720);
+    glViewport(0, 0, 1600, 900);
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -160,8 +160,8 @@ int main(int argc, char *argv[])
     Matrix viewMatrix;
     
     projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
-    float pixelRatioX(7.1/1280.0);
-    float pixelRatioY(4.0/720.0);
+    float pixelRatioX(7.1/1600.0);
+    float pixelRatioY(4.0/900.0);
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
