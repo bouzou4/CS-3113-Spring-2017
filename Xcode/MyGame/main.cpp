@@ -166,6 +166,8 @@ int main(int argc, char *argv[])
     
     std::vector<gameObject*> objects;
     std::vector<physObject*> enemies;
+    std::vector<physObject*> bullets;
+    physObject* tempBullet;
     
     std::map<std::string, SpriteSheetTexture*> shipSprites;
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
@@ -259,6 +261,11 @@ int main(int argc, char *argv[])
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
                     ufo.getVector()->setVelocity(0);
+                }
+                if (event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                    tempBullet = ufo.emit(ufo.getPos()->getX(), ufo.getPos()->getY(), 0.03, 90, shipSpriteSheet, shipSprites["laserRed"]);
+                    tempBullet->setSize(0.3);
+                    bullets.push_back(tempBullet);
                 }
             }
         }

@@ -23,6 +23,12 @@ void physObject::translate(const float& x, const float& y) {
     position.setX(position.getX() + x);
     position.setY(position.getY() + y);
 }
+physObject* physObject::emit(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width) {return new physObject(posX, posY, vecVel, vecAng, texture, height, width);}
+physObject* physObject::emit(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, SpriteSheetTexture* sprite){return new physObject(posX, posY, vecVel, vecAng, texture, sprite);}
+physObject* physObject::emit(const float& posX, const float& posY, int texture, int height, int width){return new physObject(posX, posY, texture, height, width);}
+physObject* physObject::emit(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite){return new physObject(posX, posY, texture, sprite);}
+physObject* physObject::emit(int texture, int height, int width){return new physObject(texture, height, width);}
+physObject* physObject::emit(int texture, SpriteSheetTexture* sprite){return new physObject(texture, sprite);}
 
 void physObject::moveObj(ShaderProgram* program) {
     position.setX(position.getX() + vectr.getXVelocity());

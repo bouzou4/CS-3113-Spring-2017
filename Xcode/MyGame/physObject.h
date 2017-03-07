@@ -30,6 +30,12 @@ public:
     void translateX(const float& val);
     void translateY(const float& val);
     void translate(const float& x, const float& y);
+    physObject* emit(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width);
+    physObject* emit(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, SpriteSheetTexture* sprite);
+    physObject* emit(const float& posX, const float& posY, int texture, int height, int width);
+    physObject* emit(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite);
+    physObject* emit(int texture, int height, int width);
+    physObject* emit(int texture, SpriteSheetTexture* sprite);
     
     void moveObj(ShaderProgram* program);
 };
