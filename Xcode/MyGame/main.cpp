@@ -233,8 +233,11 @@ int main(int argc, char *argv[])
         //std::cout << "shift down: " << int(ticks / 3) << std::endl;
         
         sky.drawObj(&program);
-        for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
-            (*itr)->drawObj(&program);
+        for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+            (*itr)->moveObj(&program);
+        }
+        for (std::vector<physObject*>::iterator itr = bullets.begin(); itr != bullets.end(); itr++) {
+            (*itr)->moveObj(&program);
         }
         ufo.moveObj(&program);
         DrawText(&program, textMatrix, myFontSprites, myFontSheet, "Space Invaders!", 0.25, -0.12);
