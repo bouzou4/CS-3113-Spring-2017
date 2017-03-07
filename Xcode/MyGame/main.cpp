@@ -214,24 +214,21 @@ int main(int argc, char *argv[])
             ufo.translateX(0.03);
         
         //Enemy Movement
-        if (int(fmod(ticks,7)) == 0 && timeLastY == 6) {
+        if (int(fmod(ticks/2,7)) == 0 && timeLastY == 6) {
             for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
                 (*itr)->translate(0.0, -0.25);
             }
             left = !left;
         }
-        else if (int(fmod(ticks*2,2)) == 0 && timeLastX == 1) {
+        else if (int(fmod(ticks,2)) == 0 && timeLastX == 1) {
             for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
                 (*itr)->translateX(0.25 * pow(-1, left));
             }
         }
-        timeLastX = int(fmod(ticks*2,2));
+        timeLastX = int(fmod(ticks,2));
         timeLastY = int(fmod(ticks,7));
         
-        //std::cout << int(fmod(ticks,2)) << std::endl;
-        //std::cout << "shift over: " << fmod(ticks, 10) << std::endl;
-        //std::cout << "shift down: " << int(ticks / 3) << std::endl;
-        
+        //Render Game Objects
         sky.drawObj(&program);
         for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
             (*itr)->moveObj(&program);
