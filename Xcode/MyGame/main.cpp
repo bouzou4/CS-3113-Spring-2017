@@ -167,6 +167,9 @@ int main(int argc, char *argv[])
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     
+    enum GameState { STATE_MAIN_MENU, STATE_GAME_LEVEL, STATE_GAME_OVER, STATE_GAME_WON};
+    GameState state = STATE_MAIN_MENU;
+    
     std::vector<gameObject*> objects;
     std::vector<physObject*> enemies;
     std::vector<physObject*> bullets;
@@ -176,7 +179,7 @@ int main(int argc, char *argv[])
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
     
     GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
-    Matrix textMatrix;
+    Matrix headTextMatrix, subTextMatrix;
     loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
@@ -210,39 +213,88 @@ int main(int argc, char *argv[])
         program.setProjectionMatrix(projectionMatrix);
         program.setViewMatrix(viewMatrix);
         
-        //Ufo Controls
-        if(keys[SDL_SCANCODE_LEFT] && (ufo.getPos()->getX() - (ufo.getSize()*0.5) - 0.03) > -3.55)
-            ufo.translateX(-0.03);
-        if(keys[SDL_SCANCODE_RIGHT] && (ufo.getPos()->getX() + (ufo.getSize()*0.5) + 0.03) < 3.55)
-            ufo.translateX(0.03);
-        
-        //Enemy Movement
-        if (int(fmod(ticks/2,7)) == 0 && timeLastY == 6) {
-            for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-                (*itr)->translate(0.0, -0.25);
-            }
-            left = !left;
-        }
-        else if (int(fmod(ticks,2)) == 0 && timeLastX == 1) {
-            for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-                (*itr)->translateX(0.25 * pow(-1, left));
-            }
-        }
-        timeLastX = int(fmod(ticks,2));
-        timeLastY = int(fmod(ticks,7));
-        
-        //Render Game Objects
         sky.drawObj(&program);
-        for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-            (*itr)->moveObj(&program);
-        }
-        for (std::vector<physObject*>::iterator itr = bullets.begin(); itr != bullets.end(); itr++) {
-            (*itr)->moveObj(&program);
-        }
-        ufo.moveObj(&program);
-        DrawText(&program, textMatrix, myFontSprites, myFontSheet, "Space Invaders!", 0.25, -0.12);
-        cursor.drawObj(&program);
         
+        switch (state) {
+            case STATE_MAIN_MENU: {
+                DrawText(&program, headTextMatrix, myFontSprites, myFontSheet, "SPACE INVADERS: press space", 0.3, -0.12);
+                break;
+            }
+            case STATE_GAME_LEVEL: {
+                //Ufo Controls
+                if(keys[SDL_SCANCODE_LEFT] && (ufo.getPos()->getX() - (ufo.getSize()*0.5) - 0.03) > -3.55)
+                    ufo.translateX(-0.03);
+                if(keys[SDL_SCANCODE_RIGHT] && (ufo.getPos()->getX() + (ufo.getSize()*0.5) + 0.03) < 3.55)
+                    ufo.translateX(0.03);
+                
+                //Laser Collision
+                std::vector<physObject*>::iterator itr = bullets.begin();
+                while(itr != bullets.end() && bullets.size() != 0) {
+                    if ((*itr)->getPos()->getY() > 2.0) {
+                        delete *itr;
+                        bullets.erase(itr);
+                    }
+                    std::vector<physObject*>::iterator itr2 = enemies.begin();
+                    while (itr2 != enemies.end() && enemies.size() != 0 /*&& bullets.size() != 0*/) {
+                        if (boxCollision(*(*itr)->getPos(),
+                                         (*itr)->getHeight()*pixelRatioY,
+                                         (*itr)->getWidth()*pixelRatioX,
+                                         *(*itr2)->getPos(),
+                                         (*itr2)->getHeight()*pixelRatioY,
+                                         (*itr2)->getWidth()*pixelRatioX)) {
+                            delete (*itr);
+                            delete (*itr2);
+                            bullets.erase(itr);
+                            enemies.erase(itr2);
+                            itr = bullets.begin();
+                            itr2 = enemies.begin();
+                        }
+                        itr2++;
+                    }
+                    itr++;
+                }
+                
+                //Enemy Movement
+                if (int(fmod(ticks*2/2,7)) == 0 && timeLastY == 6) {
+                    for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                        (*itr)->translate(0.0, -0.25);
+                    }
+                    left = !left;
+                }
+                else if (int(fmod(ticks*2,2)) == 0 && timeLastX == 1) {
+                    for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                        (*itr)->translateX(0.25 * pow(-1, left));
+                    }
+                }
+                timeLastX = int(fmod(ticks*2,2));
+                timeLastY = int(fmod(ticks*2,7));
+                std::cout << timeLastY << std::endl;
+                
+                //Render Game Objects
+                for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                    (*itr)->moveObj(&program);
+                    if ((*itr)->getPos()->getY() <= -1.5)
+                        state = STATE_GAME_OVER;
+                }
+                for (std::vector<physObject*>::iterator itr = bullets.begin(); itr != bullets.end(); itr++) {
+                    (*itr)->moveObj(&program);
+                }
+                ufo.moveObj(&program);
+                
+                if (enemies.size() == 0) {
+                    state = STATE_GAME_OVER;
+                }
+                
+                break;
+            }
+            case STATE_GAME_OVER: {
+                DrawText(&program, headTextMatrix, myFontSprites, myFontSheet, "Game Over!: press space", 0.25, -0.12);
+                cursor.drawObj(&program);
+            }
+                
+            default:
+                break;
+        }
         
         //switch to game window
         SDL_GL_SwapWindow(displayWindow);
@@ -256,19 +308,41 @@ int main(int argc, char *argv[])
                 cursor.getPos()->setY(((event.motion.y * pixelRatioY) - 1.9)*-1);
             }
             else if(event.type == SDL_KEYDOWN) {
-                if(event.key.keysym.scancode == SDL_SCANCODE_E) {
-                    ufo.getVector()->rotateCW();
-                }
-                else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                    ufo.getVector()->rotateCCW();
-                }
-                if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
-                    ufo.getVector()->setVelocity(0);
-                }
-                if (event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-                    tempBullet = ufo.emit(ufo.getPos()->getX(), ufo.getPos()->getY(), 0.03, 90, shipSpriteSheet, shipSprites["laserRed"]);
-                    tempBullet->setSize(0.3);
-                    bullets.push_back(tempBullet);
+                switch (state) {
+                    case STATE_MAIN_MENU: {
+                        if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                            state = STATE_GAME_LEVEL;
+                        }
+                        break;
+                    }
+                        
+                    case STATE_GAME_LEVEL: {
+                        if(event.key.keysym.scancode == SDL_SCANCODE_E) {
+                            ufo.getVector()->rotateCW();
+                        }
+                        else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
+                            ufo.getVector()->rotateCCW();
+                        }
+                        if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
+                            ufo.getVector()->setVelocity(0);
+                        }
+                        if (event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                            tempBullet = ufo.emit(ufo.getPos()->getX(), ufo.getPos()->getY(), 0.03, 90, shipSpriteSheet, shipSprites["laserRed"]);
+                            tempBullet->setSize(0.3);
+                            bullets.push_back(tempBullet);
+                        }
+                        break;
+                    }
+                        
+                    case STATE_GAME_OVER: {
+                        if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                            state = STATE_GAME_LEVEL;
+                        }
+                        break;
+                    }
+                        
+                    default:
+                        break;
                 }
             }
         }
