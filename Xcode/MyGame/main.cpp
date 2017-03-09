@@ -93,6 +93,9 @@ void DrawText(ShaderProgram* program, Matrix& modelMatrix, std::map<size_t, Spri
         });
         memcpy((texCoordData.data() + (12*i)), font[code]->getTexCoordsPtr(), 48);
     }
+    float width = (size*-0.5)-((spacing*text.size()-1)+(text.size()*size))/2;
+    float tsize = text.size();
+    modelMatrix.Translate(width, 0, 0);
     glBindTexture(GL_TEXTURE_2D, fontSheet);
     
     glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertexData.data());
