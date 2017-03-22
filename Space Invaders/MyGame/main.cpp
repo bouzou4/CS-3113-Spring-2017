@@ -187,9 +187,10 @@ int main(int argc, char *argv[])
         enemies.push_back(new physObject(-3 + ((x % 10) * 0.5), 1.75 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
         objects.push_back(enemies[x]);
         enemies[x]->setSize(0.4);
+        enemies[x]->getVector()->setVelocity(0.004);
+        enemies[x]->getVector()->setAngle(0);
     }
-    int timeLastX = 0, timeLastY = 0;
-    bool left = false;
+    int timeLast = 0;
     
     gameObject sky(int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
@@ -255,6 +256,7 @@ int main(int argc, char *argv[])
                 }
                 
                 //Enemy Movement
+                /*
                 if (int(fmod(ticks*2/2,7)) == 0 && timeLastY == 6) {
                     for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
                         (*itr)->translate(0.0, -0.25);
@@ -266,9 +268,16 @@ int main(int argc, char *argv[])
                         (*itr)->translateX(0.25 * pow(-1, left));
                     }
                 }
-                timeLastX = int(fmod(ticks*2,2));
-                timeLastY = int(fmod(ticks*2,7));
-                std::cout << timeLastY << std::endl;
+                 */
+                if (int(fmod(ticks, 6)) == 0 && timeLast == 5) {
+                    for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
+                        (*itr)->translate(0.0, -0.25);
+                        (*itr)->getVector()->flipX();
+                    }
+                }
+                timeLast = int(fmod(ticks, 6));
+                std::cout << "elapsed: " << elapsed << std::endl;
+                std::cout << "int(fmod(ticks, 6)): " << int(fmod(ticks, 6)) << std::endl;
                 
                 //Render Game Objects
                 for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
