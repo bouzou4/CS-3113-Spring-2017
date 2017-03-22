@@ -23,9 +23,9 @@
 
 SDL_Window* displayWindow;
 
-GLuint LoadTexture(const char *filePath, int& h, int& w) {
+GLuint LoadTexture(const std::string& filePath, int& h, int& w) {
     int comp;
-    unsigned char* image = stbi_load(filePath, &w, &h, &comp, STBI_rgb_alpha);
+    unsigned char* image = stbi_load(filePath.c_str(), &w, &h, &comp, STBI_rgb_alpha);
     if(image == NULL) {
         std::cout << "Unable to load image. Make sure the path is correct\n";
         assert(false);
@@ -173,10 +173,10 @@ int main(int argc, char *argv[])
     std::map<std::string, SpriteSheetTexture*> shipSprites;
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
     
-    GLuint myFontSheet = LoadTexture((RESOURCE_FOLDER"texts/myFont.png").c_str(), objHeight, objWidth);
+    GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
     Matrix textMatrix;
     loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
-    GLuint shipSpriteSheet = LoadTexture((RESOURCE_FOLDER"texts/shipSprites.png").c_str(), objHeight, objWidth);
+    GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
     
     for (size_t x = 0; x < 40; x++) {
@@ -184,14 +184,14 @@ int main(int argc, char *argv[])
         objects.push_back(enemies[x]);
         enemies[x]->setSize(0.4);
     }
-    gameObject sky(0, 0.25, int(LoadTexture((RESOURCE_FOLDER"sky.png").c_str(), objHeight, objWidth)), objHeight, objWidth);
+    gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
-    gameObject ground(0, -1.75, int(LoadTexture((RESOURCE_FOLDER"grass.png").c_str(), objHeight, objWidth)), objHeight, objWidth);
+    gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
     ground.skewWidth(16.0);
     ground.setSize(0.5);
     physObject ufo(shipSpriteSheet, shipSprites["ufo"]);
     ufo.setSize(0.3);
-    gameObject cursor(int(LoadTexture((RESOURCE_FOLDER"cursor.png").c_str(), objHeight, objWidth)), objHeight, objWidth);
+    gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
     
     glUseProgram(program.programID);
