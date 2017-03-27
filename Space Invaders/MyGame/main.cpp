@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
     std::vector<physObject*> enemies;
     std::vector<physObject*> bullets;
     physObject* tempBullet;
+    int timeLast = 0;
     
     std::map<std::string, SpriteSheetTexture*> shipSprites;
     std::map<size_t, SpriteSheetTexture*> myFontSprites;
@@ -190,7 +191,15 @@ int main(int argc, char *argv[])
         enemies[x]->getVector()->setVelocity(0.004);
         enemies[x]->getVector()->setAngle(0);
     }
-    int timeLast = 0;
+    
+    physObject* left = new physObject(enemies[0]->getPos()->getX(), enemies[0]->getPos()->getY(), shipSpriteSheet, shipSprites["enemyRed1"]);
+    left->setSize(0.4);
+    left->getVector()->setVelocity(0.004);
+    left->getVector()->setAngle(0);
+    physObject* right = new physObject(enemies[9]->getPos()->getX(), enemies[9]->getPos()->getY(), shipSpriteSheet, shipSprites["enemyRed1"]);
+    right->setSize(0.4);
+    right->getVector()->setVelocity(0.004);
+    right->getVector()->setAngle(0);
     
     gameObject sky(int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
     sky.setSize(7.5);
@@ -256,24 +265,13 @@ int main(int argc, char *argv[])
                 }
                 
                 //Enemy Movement
-                /*
-                if (int(fmod(ticks*2/2,7)) == 0 && timeLastY == 6) {
-                    for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-                        (*itr)->translate(0.0, -0.25);
-                    }
-                    left = !left;
-                }
-                else if (int(fmod(ticks*2,2)) == 0 && timeLastX == 1) {
-                    for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-                        (*itr)->translateX(0.25 * pow(-1, left));
-                    }
-                }
-                 */
-                if (int(fmod(ticks, 6)) == 0 && timeLast == 5) {
+                if (((right->getPos()->getX() > 3) && (int(right->getVector()->getAngle()) == 0)) || ((left->getPos()->getX() < -3) && (int(right->getVector()->getAngle()) == 180))) {
                     for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
                         (*itr)->translate(0.0, -0.25);
                         (*itr)->getVector()->flipX();
                     }
+                    left->getVector()->flipX();
+                    right->getVector()->flipX();
                 }
                 timeLast = int(fmod(ticks, 6));
                 std::cout << "elapsed: " << elapsed << std::endl;
@@ -281,14 +279,18 @@ int main(int argc, char *argv[])
                 
                 //Render Game Objects
                 for (std::vector<physObject*>::iterator itr = enemies.begin(); itr != enemies.end(); itr++) {
-                    (*itr)->moveObj(&program);
-                    if ((*itr)->getPos()->getY() <= -1.5)
+                    (*itr)->processDraw(&program);
+                    if ((*itr)->getPos()->getY() <= -1.5) {
                         state = STATE_GAME_OVER;
+                        break;
+                    }
                 }
                 for (std::vector<physObject*>::iterator itr = bullets.begin(); itr != bullets.end(); itr++) {
-                    (*itr)->moveObj(&program);
+                    (*itr)->processDraw(&program);
                 }
-                ufo.moveObj(&program);
+                ufo.processDraw(&program);
+                left->moveObj();
+                right->moveObj();
                 
                 if (enemies.size() == 0) {
                     state = STATE_GAME_OVER;

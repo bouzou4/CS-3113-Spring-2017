@@ -30,7 +30,11 @@ physObject* physObject::emit(const float& posX, const float& posY, int texture, 
 physObject* physObject::emit(int texture, int height, int width){return new physObject(texture, height, width);}
 physObject* physObject::emit(int texture, SpriteSheetTexture* sprite){return new physObject(texture, sprite);}
 
-void physObject::moveObj(ShaderProgram* program) {
+void physObject::moveObj() {
+    position.setX(position.getX() + vectr.getXVelocity());
+    position.setY(position.getY() + vectr.getYVelocity());
+}
+void physObject::processDraw(ShaderProgram* program) {
     position.setX(position.getX() + vectr.getXVelocity());
     position.setY(position.getY() + vectr.getYVelocity());
     drawObj(program);

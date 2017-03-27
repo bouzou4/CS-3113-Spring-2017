@@ -13,7 +13,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "physObject.h"
+#include "simplePhysObject.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -171,16 +171,16 @@ int main(int argc, char *argv[])
     std::vector<gameObject*> enemies;
     
     std::map<std::string, SpriteSheetTexture*> shipSprites;
-    std::map<size_t, SpriteSheetTexture*> myFontSprites;
-    
-    GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
-    Matrix textMatrix;
-    loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
     GLuint shipSpriteSheet = LoadTexture(RESOURCE_FOLDER"texts/shipSprites.png", objHeight, objWidth);
     loadSpriteSheet(shipSprites, "shipSprites");
     
-    for (size_t x = 0; x < 40; x++) {
-        enemies.push_back(new physObject(-3 + ((x % 10) * 0.5), 1.5 - (int(x/10) * 0.5), shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
+    std::map<size_t, SpriteSheetTexture*> myFontSprites;
+    GLuint myFontSheet = LoadTexture(RESOURCE_FOLDER"texts/myFont.png", objHeight, objWidth);
+    loadSpacedSpriteSheet(myFontSprites, objHeight, objWidth, 16, 16);
+    Matrix textMatrix;
+    
+    for (size_t x = 0; x < 10; x++) {
+        enemies.push_back(new simplePhysObject(-3 + (0.5 * x), 1.5, shipSpriteSheet, shipSprites[("enemyBlack" + std::to_string((rand() % 5) + 1))]));
         objects.push_back(enemies[x]);
         enemies[x]->setSize(0.4);
     }
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
     ground.skewWidth(16.0);
     ground.setSize(0.5);
-    physObject ufo(shipSpriteSheet, shipSprites["ufo"]);
+    simplePhysObject ufo(shipSpriteSheet, shipSprites["ufo"]);
     ufo.setSize(0.3);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
         for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
             (*itr)->drawObj(&program);
         }
-        ufo.moveObj(&program);
+        ufo.processDraw(&program);
         DrawText(&program, textMatrix, myFontSprites, myFontSheet, "just some text", 0.25, -0.12);
         cursor.drawObj(&program);
         

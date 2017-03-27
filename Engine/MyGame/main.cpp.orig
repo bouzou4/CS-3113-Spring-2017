@@ -14,7 +14,7 @@
 
 #include "ShaderProgram.h"
 #include "SpriteSheetTexture.h"
-#include "physObject.h"
+#include "simplePhysObject.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     GLfloat groundVerts[] = {-3.55, -0.25, 3.55, -0.25, 3.55, 0.25, -3.55, -0.25, 3.55, 0.25, -3.55, 0.25};
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png")));
     GLfloat ufoVerts[] = {-0.25, -0.25, 0.25, -0.25, 0.25, 0.25, -0.25, -0.25, 0.25, 0.25, -0.25, 0.25};
-    physObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png")));
+    simplePhysObject ufo(int(LoadTexture(RESOURCE_FOLDER"ufo.png")));
     GLfloat cursorVerts[] = {-0.1, -0.1, 0.1, -0.1, 0.1, 0.1, -0.1, -0.1, 0.1, 0.1, -0.1, 0.1};
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png")));
     

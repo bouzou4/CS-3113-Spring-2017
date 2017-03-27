@@ -37,5 +37,6 @@ public:
     physObject* emit(int texture, int height, int width);
     physObject* emit(int texture, SpriteSheetTexture* sprite);
     
-    void moveObj(ShaderProgram* program);
+    void moveObj();
+    void processDraw(ShaderProgram* program);
 };

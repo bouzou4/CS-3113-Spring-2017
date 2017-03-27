@@ -24,7 +24,7 @@
 		D71B18F71E51F0CA001F4F21 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = D71B18F61E51F0CA001F4F21 /* grass.png */; };
 		D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F2171E54A5F100A22748 /* phyVector.cpp */; };
 		D757FB4D1E5E33D900DEFF13 /* gameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */; };
-		D757FB501E5E34EC00DEFF13 /* physObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D757FB4E1E5E34EC00DEFF13 /* physObject.cpp */; };
+		D757FB501E5E34EC00DEFF13 /* simplePhysObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */; };
 		D757FB521E5E7A6D00DEFF13 /* cursor.png in Resources */ = {isa = PBXBuildFile; fileRef = D757FB511E5E7A6D00DEFF13 /* cursor.png */; };
 		D791C0C61E4A474300B1E968 /* ufo.png in Resources */ = {isa = PBXBuildFile; fileRef = D791C0C51E4A474300B1E968 /* ufo.png */; };
 		D7B630331E525C150028ADB5 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B630321E525C150028ADB5 /* sky.png */; };
@@ -61,8 +61,8 @@
 		D750F2181E54A5F100A22748 /* phyVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = phyVector.h; sourceTree = "<group>"; };
 		D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gameObject.cpp; sourceTree = "<group>"; };
 		D757FB4C1E5E33D900DEFF13 /* gameObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameObject.h; sourceTree = "<group>"; };
-		D757FB4E1E5E34EC00DEFF13 /* physObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physObject.cpp; sourceTree = "<group>"; };
-		D757FB4F1E5E34EC00DEFF13 /* physObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physObject.h; sourceTree = "<group>"; };
+		D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simplePhysObject.cpp; sourceTree = "<group>"; };
+		D757FB4F1E5E34EC00DEFF13 /* simplePhysObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simplePhysObject.h; sourceTree = "<group>"; };
 		D757FB511E5E7A6D00DEFF13 /* cursor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cursor.png; sourceTree = "<group>"; };
 		D791C0C51E4A474300B1E968 /* ufo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ufo.png; sourceTree = "<group>"; };
 		D7B630321E525C150028ADB5 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sky.png; sourceTree = "<group>"; };
@@ -188,8 +188,8 @@
 				D750F2181E54A5F100A22748 /* phyVector.h */,
 				D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */,
 				D757FB4C1E5E33D900DEFF13 /* gameObject.h */,
-				D757FB4E1E5E34EC00DEFF13 /* physObject.cpp */,
-				D757FB4F1E5E34EC00DEFF13 /* physObject.h */,
+				D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */,
+				D757FB4F1E5E34EC00DEFF13 /* simplePhysObject.h */,
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
 			name = Code;
@@ -281,7 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7BF0FE51E64F69B002C8659 /* SpriteSheetTexture.cpp in Sources */,
-				D757FB501E5E34EC00DEFF13 /* physObject.cpp in Sources */,
+				D757FB501E5E34EC00DEFF13 /* simplePhysObject.cpp in Sources */,
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
 				D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */,
