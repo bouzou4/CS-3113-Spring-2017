@@ -22,7 +22,8 @@
 		6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */; };
 		6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23C01B96CC2600BCE792 /* vertex.glsl */; };
 		D71B18F71E51F0CA001F4F21 /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = D71B18F61E51F0CA001F4F21 /* grass.png */; };
-		D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F2171E54A5F100A22748 /* phyVector.cpp */; };
+		D724755F1E893CD8005C3FA7 /* physObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D724755D1E893CD8005C3FA7 /* physObject.cpp */; };
+		D750F2191E54A5F100A22748 /* Phys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F2171E54A5F100A22748 /* Phys.cpp */; };
 		D757FB4D1E5E33D900DEFF13 /* gameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */; };
 		D757FB501E5E34EC00DEFF13 /* simplePhysObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */; };
 		D757FB521E5E7A6D00DEFF13 /* cursor.png in Resources */ = {isa = PBXBuildFile; fileRef = D757FB511E5E7A6D00DEFF13 /* cursor.png */; };
@@ -57,8 +58,10 @@
 		6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
 		6DEF23C01B96CC2600BCE792 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		D71B18F61E51F0CA001F4F21 /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
-		D750F2171E54A5F100A22748 /* phyVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = phyVector.cpp; sourceTree = "<group>"; };
-		D750F2181E54A5F100A22748 /* phyVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = phyVector.h; sourceTree = "<group>"; };
+		D724755D1E893CD8005C3FA7 /* physObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physObject.cpp; sourceTree = "<group>"; };
+		D724755E1E893CD8005C3FA7 /* physObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physObject.h; sourceTree = "<group>"; };
+		D750F2171E54A5F100A22748 /* Phys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phys.cpp; sourceTree = "<group>"; };
+		D750F2181E54A5F100A22748 /* Phys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Phys.h; sourceTree = "<group>"; };
 		D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gameObject.cpp; sourceTree = "<group>"; };
 		D757FB4C1E5E33D900DEFF13 /* gameObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameObject.h; sourceTree = "<group>"; };
 		D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simplePhysObject.cpp; sourceTree = "<group>"; };
@@ -184,12 +187,14 @@
 				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
 				D7BF0FE31E64F69B002C8659 /* SpriteSheetTexture.cpp */,
 				D7BF0FE41E64F69B002C8659 /* SpriteSheetTexture.h */,
-				D750F2171E54A5F100A22748 /* phyVector.cpp */,
-				D750F2181E54A5F100A22748 /* phyVector.h */,
+				D750F2171E54A5F100A22748 /* Phys.cpp */,
+				D750F2181E54A5F100A22748 /* Phys.h */,
 				D757FB4B1E5E33D900DEFF13 /* gameObject.cpp */,
 				D757FB4C1E5E33D900DEFF13 /* gameObject.h */,
 				D757FB4E1E5E34EC00DEFF13 /* simplePhysObject.cpp */,
 				D757FB4F1E5E34EC00DEFF13 /* simplePhysObject.h */,
+				D724755D1E893CD8005C3FA7 /* physObject.cpp */,
+				D724755E1E893CD8005C3FA7 /* physObject.h */,
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
 			name = Code;
@@ -284,7 +289,8 @@
 				D757FB501E5E34EC00DEFF13 /* simplePhysObject.cpp in Sources */,
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
-				D750F2191E54A5F100A22748 /* phyVector.cpp in Sources */,
+				D750F2191E54A5F100A22748 /* Phys.cpp in Sources */,
+				D724755F1E893CD8005C3FA7 /* physObject.cpp in Sources */,
 				D7BF0FDD1E64F50C002C8659 /* pugixml.cpp in Sources */,
 				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
 				D757FB4D1E5E33D900DEFF13 /* gameObject.cpp in Sources */,

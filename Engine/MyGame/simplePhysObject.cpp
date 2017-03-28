@@ -8,14 +8,14 @@
 
 #include "simplePhysObject.h"
 
-simplePhysObject::simplePhysObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width) : gameObject(posX, posY, texture, height, width), vectr(vecVel, vecAng) {}
-simplePhysObject::simplePhysObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, SpriteSheetTexture* sprite): gameObject(posX, posY, texture, sprite), vectr(vecVel, vecAng) {}
-simplePhysObject::simplePhysObject(const float& posX, const float& posY, int texture, int height, int width) : gameObject(posX, posY, texture, height, width), vectr() {}
-simplePhysObject::simplePhysObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite): gameObject(posX, posY, texture, sprite), vectr() {}
-simplePhysObject::simplePhysObject(int texture, int height, int width) : gameObject(texture, height, width), vectr() {}
-simplePhysObject::simplePhysObject(int texture, SpriteSheetTexture* sprite): gameObject(texture, sprite), vectr() {}
+simplePhysObject::simplePhysObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width) : gameObject(posX, posY, texture, height, width), velo(vecVel, vecAng) {}
+simplePhysObject::simplePhysObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, SpriteSheetTexture* sprite): gameObject(posX, posY, texture, sprite), velo(vecVel, vecAng) {}
+simplePhysObject::simplePhysObject(const float& posX, const float& posY, int texture, int height, int width) : gameObject(posX, posY, texture, height, width), velo() {}
+simplePhysObject::simplePhysObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite): gameObject(posX, posY, texture, sprite), velo() {}
+simplePhysObject::simplePhysObject(int texture, int height, int width) : gameObject(texture, height, width), velo() {}
+simplePhysObject::simplePhysObject(int texture, SpriteSheetTexture* sprite): gameObject(texture, sprite), velo() {}
 
-phyVector* simplePhysObject::getVector() {return &vectr;}
+phyVelocity* simplePhysObject::getObjVelo() {return &velo;}
 
 void simplePhysObject::translateX(const float& val) {position.setX(position.getX() + val);}
 void simplePhysObject::translateY(const float& val) {position.setY(position.getY() + val);}
@@ -30,12 +30,7 @@ simplePhysObject* simplePhysObject::emit(const float& posX, const float& posY, i
 simplePhysObject* simplePhysObject::emit(int texture, int height, int width){return new simplePhysObject(texture, height, width);}
 simplePhysObject* simplePhysObject::emit(int texture, SpriteSheetTexture* sprite){return new simplePhysObject(texture, sprite);}
 
-void simplePhysObject::moveObj() {
-    position.setX(position.getX() + vectr.getXVelocity());
-    position.setY(position.getY() + vectr.getYVelocity());
-}
-void simplePhysObject::processDraw(ShaderProgram* program) {
-    position.setX(position.getX() + vectr.getXVelocity());
-    position.setY(position.getY() + vectr.getYVelocity());
-    drawObj(program);
+void simplePhysObject::physicsStep() {
+    position.setX(position.getX() + velo.getXVelocity());
+    position.setY(position.getY() + velo.getYVelocity());
 }

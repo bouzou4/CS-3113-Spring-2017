@@ -13,7 +13,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "simplePhysObject.h"
+#include "physObject.h"
 
 #ifdef _WINDOWS
 #define RESOURCE_FOLDER ""
@@ -191,6 +191,9 @@ int main(int argc, char *argv[])
     ground.setSize(0.5);
     simplePhysObject ufo(shipSpriteSheet, shipSprites["ufo"]);
     ufo.setSize(0.3);
+    physObject ufo2(&ufo);
+    ufo2.getObjectAccel()->setAccel(.001);
+    ufo2.getObjectAccel()->setAngle(270);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
     
@@ -225,10 +228,16 @@ int main(int argc, char *argv[])
         
         //Collision Rules
         if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo.getPos()->getY() + 0.25) > 2)) {
-            ufo.getVector()->flipY();
+            ufo.getObjVelo()->flipY();
         }
         if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
-            ufo.getVector()->flipX();
+            ufo.getObjVelo()->flipX();
+        }
+        if(boxCollision(*ufo2.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo2.getPos()->getY() + 0.25) > 2)) {
+            ufo2.getObjVelo()->flipY();
+        }
+        if (((ufo2.getPos()->getX() + 0.25) > 3.55) || ((ufo2.getPos()->getX() - 0.25) < -3.55)) {
+            ufo2.getObjVelo()->flipX();
         }
         
         sky.drawObj(&program);
@@ -236,7 +245,10 @@ int main(int argc, char *argv[])
         for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
             (*itr)->drawObj(&program);
         }
-        ufo.processDraw(&program);
+        ufo.physicsStep();
+        ufo.drawObj(&program);
+        ufo2.physicsStep();
+        ufo2.drawObj(&program);
         DrawText(&program, textMatrix, myFontSprites, myFontSheet, "just some text", 0.25, -0.12);
         cursor.drawObj(&program);
         
@@ -253,14 +265,12 @@ int main(int argc, char *argv[])
                 cursor.getPos()->setY(((event.motion.y * pixelRatioY) - 1.9)*-1);
             }
             else if(event.type == SDL_KEYDOWN) {
-                if(event.key.keysym.scancode == SDL_SCANCODE_E) {
-                    ufo.getVector()->rotateCW();
-                }
-                else if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                    ufo.getVector()->rotateCCW();
+                if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+                    ufo.getObjVelo()->setVelocity(0.01);
+                    ufo.getObjVelo()->setAngle(290);
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {
-                    ufo.getVector()->setVelocity(0);
+                    ufo.getObjVelo()->setVelocity(1E-16f);
                 }
             }
         }

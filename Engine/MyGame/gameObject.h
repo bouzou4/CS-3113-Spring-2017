@@ -10,7 +10,7 @@
 #define gameObject_h
 
 #include <stdio.h>
-#include "phyVector.h"
+#include "Phys.h"
 #include "ShaderProgram.h"
 #include "SpriteSheetTexture.h"
 

@@ -15,7 +15,8 @@
 #endif /* simplePhysObject_h */
 
 class simplePhysObject : public gameObject{
-    phyVector vectr;
+protected:
+    phyVelocity velo;
     
 public:
     simplePhysObject(const float& posX, const float& posY, const float& vecVel, const float& vecAng, int texture, int height, int width);
@@ -25,7 +26,7 @@ public:
     simplePhysObject(int texture, int height, int width);
     simplePhysObject(int texture, SpriteSheetTexture* sprite);
     
-    phyVector* getVector();
+    phyVelocity* getObjVelo();
     
     void translateX(const float& val);
     void translateY(const float& val);
@@ -37,6 +38,5 @@ public:
     simplePhysObject* emit(int texture, int height, int width);
     simplePhysObject* emit(int texture, SpriteSheetTexture* sprite);
     
-    void moveObj();
-    void processDraw(ShaderProgram* program);
+    void physicsStep();
 };
