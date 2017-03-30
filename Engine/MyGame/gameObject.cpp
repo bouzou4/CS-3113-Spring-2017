@@ -8,16 +8,26 @@
 
 #include "gameObject.h"
 
-gameObject::gameObject(const float& posX, const float& posY, int texture, int height, int width) : position(posX, posY), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
-gameObject::gameObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite) : position(posX, posY), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
-gameObject::gameObject(int texture, int height, int width) : position(), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
-gameObject::gameObject(int texture, SpriteSheetTexture* sprite) : position(), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
+gameObject::gameObject(const float& posX, const float& posY, int texture, int height, int width) : position(posX, posY), texture(texture), sprite(nullptr), height(1), width(width/height), size(1.0) {}
+gameObject::gameObject(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite) : position(posX, posY), texture(texture), sprite(sprite), height(1), width(sprite->getWidth()/sprite->getHeight()), size(1.0) {}
+gameObject::gameObject(int texture, int height, int width) : position(), texture(texture), sprite(nullptr), height(1), width(width/height), size(1.0) {}
+gameObject::gameObject(int texture, SpriteSheetTexture* sprite) : position(), texture(texture), sprite(sprite), height(1), width(sprite->getWidth()/sprite->getHeight()), size(1.0) {}
+
+//WHEN YOU WANT TO USE TEXTURE PIXEL BASED SIZES
+/*
+ position(posX, posY), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
+ position(posX, posY), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
+ position(), texture(texture), sprite(nullptr), height(height), width(width), size(1.0) {}
+ position(), texture(texture), sprite(sprite), height(sprite->getHeight()), width(sprite->getWidth()), size(1.0) {}
+*/
+
+
 
 Matrix* gameObject::getMatrix() {return &modelMatrix;}
 Coord* gameObject::getPos() {return &position;}
 int gameObject::getTexture() {return texture;}
-int gameObject::getHeight() {return height;}
-int gameObject::getWidth() {return width;}
+float gameObject::getHeight() {return height;}
+float gameObject::getWidth() {return width;}
 float gameObject::getSize() {return size;}
 float gameObject::getAspect() {return width/height;}
 void gameObject::setSize(const float& val) {
@@ -27,6 +37,12 @@ void gameObject::setSize(const float& val) {
 }
 
 void gameObject::skewWidth(const float& val) {width *= val;}
+
+bool gameObject::collidesWith(gameObject* obj) {
+    float xDist = std::abs(this->getPos()->getX() - obj->getPos()->getX()) - ((this->getWidth()*.5)+(obj->getWidth()*.5));
+    float yDist =  std::abs(this->getPos()->getY() - obj->getPos()->getY()) - ((this->getHeight()*.5)+(obj->getHeight()*.5));
+    return xDist < 0 && yDist < 0;
+}
 
 void gameObject::drawObj(ShaderProgram* program) {
     program->setModelMatrix(modelMatrix);

@@ -12,9 +12,8 @@ physObject::physObject(simplePhysObject* temp) : accel(), simplePhysObject(*temp
 
 phyAcceleration* physObject::getObjectAccel() {return &accel;}
 
-void physObject::physicsStep() {
-    velo.setXVelocity(velo.getXVelocity() + accel.getXAccel());
-    velo.setYVelocity(velo.getYVelocity() + accel.getYAccel());
-    position.setX(position.getX() + velo.getXVelocity());
-    position.setY(position.getY() + velo.getYVelocity());
+void physObject::physicsStep(const float& elapsed) {
+    velo.setXVelocity(velo.getXVelocity() + (accel.getXAccel() * elapsed));
+    velo.setYVelocity(velo.getYVelocity() + (accel.getYAccel() * elapsed));
+    simplePhysObject::physicsStep(elapsed);
 }

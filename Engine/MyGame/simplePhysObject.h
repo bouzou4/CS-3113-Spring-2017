@@ -15,6 +15,9 @@
 #endif /* simplePhysObject_h */
 
 class simplePhysObject : public gameObject{
+    
+    //WRITE COLLISION FUNCTION [bool collidesWith(simplePhysObject*)]
+    
 protected:
     phyVelocity velo;
     
@@ -37,6 +40,5 @@ public:
     simplePhysObject* emit(const float& posX, const float& posY, int texture, SpriteSheetTexture* sprite);
     simplePhysObject* emit(int texture, int height, int width);
     simplePhysObject* emit(int texture, SpriteSheetTexture* sprite);
-    
-    void physicsStep();
+    virtual void physicsStep(const float& elapsed);
 };

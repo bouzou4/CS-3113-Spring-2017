@@ -30,7 +30,9 @@ simplePhysObject* simplePhysObject::emit(const float& posX, const float& posY, i
 simplePhysObject* simplePhysObject::emit(int texture, int height, int width){return new simplePhysObject(texture, height, width);}
 simplePhysObject* simplePhysObject::emit(int texture, SpriteSheetTexture* sprite){return new simplePhysObject(texture, sprite);}
 
-void simplePhysObject::physicsStep() {
-    position.setX(position.getX() + velo.getXVelocity());
-    position.setY(position.getY() + velo.getYVelocity());
+void simplePhysObject::physicsStep(const float& elapsed) {
+    position.setX(position.getX() + (velo.getXVelocity() * elapsed));
+    //collisionX();
+    position.setY(position.getY() + (velo.getYVelocity() * elapsed));
+    //collisionY();
 }

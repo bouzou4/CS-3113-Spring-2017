@@ -16,6 +16,7 @@
 
 #endif /* gameObject_h */
 
+
 class gameObject {
 protected:
     Coord position;
@@ -25,6 +26,7 @@ protected:
     float height;
     float width;
     float size;
+    int type;
     
 public:
     gameObject(const float& posX, const float& posY, int texture, int height, int width);
@@ -35,12 +37,17 @@ public:
     Matrix* getMatrix();
     Coord* getPos();
     int getTexture();
-    int getHeight();
-    int getWidth();
+    float getHeight();
+    float getWidth();
     float getSize();
     float getAspect();
     void setSize(const float& val);
     
     void skewWidth(const float& val);
+    float getTop();
+    float getBottom();
+    float getRight();
+    float getLeft();
+    bool collidesWith(gameObject* obj);
     void drawObj(ShaderProgram* program);
 };

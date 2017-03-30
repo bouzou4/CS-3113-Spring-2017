@@ -7,7 +7,6 @@
 
 #include <map>
 #include <vector>
-#include <math.h>
 #include "pugixml.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -20,6 +19,9 @@
 #else
 #define RESOURCE_FOLDER std::string(SDL_GetBasePath()) +
 #endif
+
+#define FIXED_TIMESTEP 0.0166666f // 60 FPS (1.0f/60.0f)
+#define MAX_TIMESTEPS 6
 
 SDL_Window* displayWindow;
 
@@ -94,7 +96,6 @@ void DrawText(ShaderProgram* program, Matrix& modelMatrix, std::map<size_t, Spri
         memcpy((texCoordData.data() + (12*i)), font[code]->getTexCoordsPtr(), 48);
     }
     float width = (size*-0.5)-((spacing*text.size()-1)+(text.size()*size))/2;
-    float tsize = text.size();
     modelMatrix.Translate(width, 0, 0);
     glBindTexture(GL_TEXTURE_2D, fontSheet);
     
@@ -107,8 +108,6 @@ void DrawText(ShaderProgram* program, Matrix& modelMatrix, std::map<size_t, Spri
     glDrawArrays(GL_TRIANGLES, 0, vertLen/2);
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
-    
-    
 }
 
 void initScene() {
@@ -126,26 +125,18 @@ void initScene() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-bool boxCollision(Coord& pos1, float height1, float width1, Coord& pos2, float height2, float width2) {
-    float top1 = (pos1.getY() + height1/2);
-    float top2 = (pos2.getY() + height2/2);
-    float right1 = (pos1.getX() + width1/2);
-    float right2 = (pos2.getX() + width2/2);
-    float bottom1 = (pos1.getY() - height1/2);
-    float bottom2 = (pos2.getY() - height2/2);
-    float left1 = (pos1.getX() - width1/2);
-    float left2 = (pos2.getX() - width2/2);
-    
-    bool top = ((top1 > bottom2) && (top1 < top2));
-    bool right = ((right1 > left2) && (right1 < right2));
-    bool bottom = ((bottom1 > bottom2) && (bottom1 < top2));
-    bool left = ((right1 > right2) && (left1 < right2));
-    
-    
-    if ((top || bottom) && (left || right)) {
-        return true;
+void updatePhysics(float fixedElapsed, std::vector<simplePhysObject*>& objects, simplePhysObject* ufo, gameObject* ground) {
+    for (size_t x = 0; x < objects.size(); x++) {
+        if(fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
+            fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
+        }
+        while (fixedElapsed >= FIXED_TIMESTEP ) {
+            fixedElapsed -= FIXED_TIMESTEP;
+            objects[x]->physicsStep(FIXED_TIMESTEP);
+        }
+        objects[x]->physicsStep(fixedElapsed);
     }
-    return false;
+    
 }
 
 int main(int argc, char *argv[])
@@ -168,6 +159,7 @@ int main(int argc, char *argv[])
     ShaderProgram program((RESOURCE_FOLDER"vertex_textured.glsl").c_str(), (RESOURCE_FOLDER"fragment_textured.glsl").c_str());
     
     std::vector<gameObject*> objects;
+    std::vector<simplePhysObject*> physObjects;
     std::vector<gameObject*> enemies;
     
     std::map<std::string, SpriteSheetTexture*> shipSprites;
@@ -185,14 +177,20 @@ int main(int argc, char *argv[])
         enemies[x]->setSize(0.4);
     }
     gameObject sky(0, 0.25, int(LoadTexture(RESOURCE_FOLDER"sky.png", objHeight, objWidth)), objHeight, objWidth);
+    objects.push_back(&sky);
     sky.setSize(7.5);
     gameObject ground(0, -1.75, int(LoadTexture(RESOURCE_FOLDER"grass.png", objHeight, objWidth)), objHeight, objWidth);
+    objects.push_back(&ground);
     ground.skewWidth(16.0);
     ground.setSize(0.5);
     simplePhysObject ufo(shipSpriteSheet, shipSprites["ufo"]);
-    ufo.setSize(0.3);
+    objects.push_back(&ufo);
+    physObjects.push_back(&ufo);
+    //ufo.setSize(0.3);
     physObject ufo2(&ufo);
-    ufo2.getObjectAccel()->setAccel(.001);
+    objects.push_back(&ufo2);
+    physObjects.push_back(&ufo2);
+    ufo2.getObjectAccel()->setAccel(1);
     ufo2.getObjectAccel()->setAngle(270);
     gameObject cursor(int(LoadTexture(RESOURCE_FOLDER"cursor.png", objHeight, objWidth)), objHeight, objWidth);
     cursor.setSize(0.3);
@@ -226,29 +224,23 @@ int main(int argc, char *argv[])
             ufo.translateY(-0.03);
         }
         
-        //Collision Rules
-        if(boxCollision(*ufo.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo.getPos()->getY() + 0.25) > 2)) {
+        //Collision Rules (need to be moved to updatePhysics())
+        if(ufo.collidesWith(&ground) || ((ufo.getPos()->getY() + ufo.getHeight()/2) > 2)) {
             ufo.getObjVelo()->flipY();
         }
-        if (((ufo.getPos()->getX() + 0.25) > 3.55) || ((ufo.getPos()->getX() - 0.25) < -3.55)) {
+        if (((ufo.getPos()->getX() + ufo.getWidth()/2) > 3.55) || ((ufo.getPos()->getX() - ufo.getWidth()/2) < -3.55)) {
             ufo.getObjVelo()->flipX();
         }
-        if(boxCollision(*ufo2.getPos(), .5, .5, *ground.getPos(), 0.5, 8.0) || ((ufo2.getPos()->getY() + 0.25) > 2)) {
+        if(ufo2.collidesWith(&ground)) {
             ufo2.getObjVelo()->flipY();
         }
         if (((ufo2.getPos()->getX() + 0.25) > 3.55) || ((ufo2.getPos()->getX() - 0.25) < -3.55)) {
             ufo2.getObjVelo()->flipX();
         }
+        updatePhysics(elapsed, physObjects, &ufo, &ground);
         
-        sky.drawObj(&program);
-        ground.drawObj(&program);
-        for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {
-            (*itr)->drawObj(&program);
-        }
-        ufo.physicsStep();
-        ufo.drawObj(&program);
-        ufo2.physicsStep();
-        ufo2.drawObj(&program);
+        /* draw all objects */
+        for (std::vector<gameObject*>::iterator itr = objects.begin(); itr != objects.end(); itr++) {(*itr)->drawObj(&program);}
         DrawText(&program, textMatrix, myFontSprites, myFontSheet, "just some text", 0.25, -0.12);
         cursor.drawObj(&program);
         
@@ -266,7 +258,7 @@ int main(int argc, char *argv[])
             }
             else if(event.type == SDL_KEYDOWN) {
                 if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-                    ufo.getObjVelo()->setVelocity(0.01);
+                    ufo.getObjVelo()->setVelocity(1);
                     ufo.getObjVelo()->setAngle(290);
                 }
                 if((event.key.keysym.scancode == SDL_SCANCODE_LSHIFT) || (event.key.keysym.scancode == SDL_SCANCODE_RSHIFT)) {

@@ -23,5 +23,5 @@ public:
     
     phyAcceleration* getObjectAccel();
     
-    void physicsStep();
+    void physicsStep(const float& elapsed);
 };

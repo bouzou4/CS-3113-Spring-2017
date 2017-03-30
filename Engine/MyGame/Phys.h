@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <cmath>
 
 float getXLeg(const float& hypot, const float& ang);
 float getYLeg(const float& hypot, const float& ang);
